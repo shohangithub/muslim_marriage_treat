@@ -18,7 +18,10 @@ export class BookingService {
   }
 
   findAll() {
-    return this.userRepository.find();
+    setTimeout(()=>{
+      console.log("Occuered")
+    },5000); 
+    return this.userRepository.find({relations:{room:true}});
   }
 
   findOne(id: number) {

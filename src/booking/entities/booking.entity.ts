@@ -1,5 +1,6 @@
+import { Room } from 'src/room/entities/room.entity';
 import { BOOKING_STATUS, TRANS_METHOD } from 'src/utills/enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Booking {
@@ -12,11 +13,6 @@ export class Booking {
   @Column({ unique: true, nullable: true })
   transactionNo!: string;
 
-  // @ManyToOne(() => Treat, (treat) => treat.Rooms)
-  // treat: Treat;
-
-  // @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
-  // roomType: RoomType;
 
   @Column()
   firstName: string;
@@ -38,4 +34,7 @@ export class Booking {
 
   @Column({ default: BOOKING_STATUS.PENDING })
   bookingStatus: BOOKING_STATUS;
+
+  @ManyToOne(() => Room, (room) => room.bookings)
+  room: Room;
 }
