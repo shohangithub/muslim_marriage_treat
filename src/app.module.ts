@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { RoomTypeModule } from './room-type/room-type.module';
 import { TreatModule } from './treat/treat.module';
 import { BookingModule } from './booking/booking.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksService } from './utills/task-service.service';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { BookingModule } from './booking/booking.module';
       entities: [__dirname + '/../**/*.entity.js'],
       synchronize: true,
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     RoomModule,
     AuthModule,
@@ -29,6 +32,6 @@ import { BookingModule } from './booking/booking.module';
     BookingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [ TasksService, AppService],
 })
 export class AppModule {}

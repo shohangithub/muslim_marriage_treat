@@ -17,6 +17,7 @@ export class CreateBookingDto {
     @IsNotEmpty()
     phone: string;
     bookedFrom: string;
+    expireTime!: string;
     bookingStatus: BOOKING_STATUS;
     @IsNotEmpty()
     room: Room;

@@ -29,6 +29,9 @@ export class Booking {
   @Column({ default: new Date().getTime() })
   bookedTime: string;
 
+  @Column({ default: new Date((new Date().setMinutes(new Date().getMinutes()+5))).getTime()})
+  expireTime!: string;
+
   @Column()
   bookedFrom: string;
 
