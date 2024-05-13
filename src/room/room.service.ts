@@ -17,7 +17,12 @@ export class RoomService {
   }
 
   findAll() {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: {
+          roomType: true,
+          treat: true,
+      },
+  });
   }
 
   findOne(id: number) {

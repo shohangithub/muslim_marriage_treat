@@ -1,35 +1,36 @@
-
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { RoomType } from 'src/room-type/entities/room-type.entity';
+import { Treat } from 'src/treat/entities/treat.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Room {
-    @PrimaryGeneratedColumn()
-    id: number;
-  
-    @Column()
-    roomName: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    // @ManyToOne(() => Treat, (treat) => treat.Rooms)
-    // treat: Treat;
+  @Column()
+  roomName: string;
 
-    // @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
-    // roomType: RoomType;
-    
-    @Column()
-    packagePrice: number;
-  
-    @Column({ default: 0 })
-    totalQty: number;
-  
-    @Column({ default: 0 })
-    bookedQty: number;
+  @ManyToOne(() => Treat, (treat) => treat.Rooms)
+  treat: Treat;
 
-    @Column({ default: 0 })
-    lookedQty: number;
+  @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
+  roomType: RoomType;
 
-    @Column({ default: 0 })
-    availableRooms: number;
-  
-    @Column({ default: true })
-    isActive: boolean;
+  @Column()
+  packagePrice: number;
+
+  @Column({ default: 0 })
+  totalQty: number;
+
+  @Column({ default: 0 })
+  bookedQty: number;
+
+  @Column({ default: 0 })
+  lookedQty: number;
+
+  @Column({ default: 0 })
+  availableRooms: number;
+
+  @Column({ default: true })
+  isActive: boolean;
 }

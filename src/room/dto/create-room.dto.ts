@@ -1,4 +1,6 @@
 import { IsNotEmpty } from "class-validator";
+import { RoomType } from "src/room-type/entities/room-type.entity";
+import { Treat } from "src/treat/entities/treat.entity";
 
 export class CreateRoomDto {
 
@@ -10,6 +12,12 @@ export class CreateRoomDto {
   
     @IsNotEmpty()
     totalQty: number;
+
+    @IsNotEmpty()
+    treat: Treat;
+
+    @IsNotEmpty()
+    roomType: RoomType;
 
     bookedQty: number;
     lookedQty: number;
