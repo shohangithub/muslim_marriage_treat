@@ -1,5 +1,4 @@
-import { Room } from "src/room/entities/room.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class RoomType {
     @PrimaryGeneratedColumn()
@@ -14,6 +13,6 @@ export class RoomType {
     @Column({ default: true })
     isActive: boolean;
     
-    @OneToMany(() => Room, (room) => room.roomType)
-    rooms!:Room[];
+    // @OneToMany(() => Room, (room) => room.roomType)
+    // rooms!:Room[];
 }

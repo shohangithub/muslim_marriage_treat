@@ -18,7 +18,7 @@ export class BookingService {
   }
 
   findAll() {
-    return this.userRepository.find({ relations: { room: true } });
+    return this.userRepository.find({ relations: { package: true } });
   }
 
   findOne(id: number) {

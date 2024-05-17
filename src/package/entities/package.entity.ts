@@ -1,21 +1,17 @@
 import { Booking } from 'src/booking/entities/booking.entity';
-import { RoomType } from 'src/room-type/entities/room-type.entity';
-import { Treat } from 'src/treat/entities/treat.entity';
+import { Event } from 'src/event/entities/event.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Room {
+export class Package {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  roomName: string;
+  packageName: string;
 
-  @ManyToOne(() => Treat, (treat) => treat.Rooms)
-  treat: Treat;
-
-  @ManyToOne(() => RoomType, (roomType) => roomType.rooms)
-  roomType: RoomType;
+  @ManyToOne(() => Event, (event) => event.packages)
+  event: Event;
 
   @Column()
   packagePrice: number;
@@ -30,11 +26,11 @@ export class Room {
   lookedQty: number;
 
   @Column({ default: 0 })
-  availableRooms: number;
+  availablePackages: number;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => Booking, (booking) => booking.room)
+  @OneToMany(() => Booking, (booking) => booking.package)
   bookings!:Booking[];
 }

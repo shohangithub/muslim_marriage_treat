@@ -1,5 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { Room } from "src/room/entities/room.entity";
+import { Package } from "src/package/entities/package.entity";
 import { BOOKING_STATUS, TRANS_METHOD } from "src/utills/enum";
 
 export class CreateBookingDto {
@@ -20,5 +20,5 @@ export class CreateBookingDto {
     expireTime!: string;
     bookingStatus: BOOKING_STATUS;
     @IsNotEmpty()
-    room: Room;
+    package: Package;
 }
