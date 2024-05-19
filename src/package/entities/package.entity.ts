@@ -1,6 +1,13 @@
 import { Booking } from 'src/booking/entities/booking.entity';
 import { Event } from 'src/event/entities/event.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { PACKAGE_TYPE } from 'src/utills/enum';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Package {
@@ -9,6 +16,18 @@ export class Package {
 
   @Column()
   packageName: string;
+
+  @Column()
+  packageType: PACKAGE_TYPE;
+
+  @Column()
+  acitivities!: string;
+
+  @Column({ length: 1000 })
+  facilities!: string;
+
+  @Column({ length: 1000 })
+  features!: string;
 
   @ManyToOne(() => Event, (event) => event.packages)
   event: Event;
@@ -32,5 +51,5 @@ export class Package {
   isActive: boolean;
 
   @OneToMany(() => Booking, (booking) => booking.package)
-  bookings!:Booking[];
+  bookings!: Booking[];
 }
