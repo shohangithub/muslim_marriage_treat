@@ -10,6 +10,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from './utills/task-service.service';
 import { EventModule } from './event/event.module';
 import { PackageModule } from './package/package.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PackageModule } from './package/package.module';
     RoomTypeModule,
     EventModule,
     BookingModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [ TasksService, AppService],

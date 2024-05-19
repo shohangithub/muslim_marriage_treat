@@ -9,4 +9,11 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  
+  @Get('send-email')
+  sendEmail() {
+      this.appService.sendEmail();
+     return "Send Successfully"
+  }
 }
