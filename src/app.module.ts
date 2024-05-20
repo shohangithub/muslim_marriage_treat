@@ -1,3 +1,4 @@
+import { AzureBlobModule } from './azure-blob/azure-blob.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,6 +15,7 @@ import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
+    AzureBlobModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
