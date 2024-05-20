@@ -12,6 +12,7 @@ import { TasksService } from './utills/task-service.service';
 import { EventModule } from './event/event.module';
 import { PackageModule } from './package/package.module';
 import { MailModule } from './mail/mail.module';
+import { VenueModule } from './venue/venue.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MailModule } from './mail/mail.module';
     EventModule,
     BookingModule,
     MailModule,
+    VenueModule,
   ],
   controllers: [AppController],
   providers: [ TasksService, AppService],

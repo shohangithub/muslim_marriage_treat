@@ -1,5 +1,6 @@
 import { Package } from 'src/package/entities/package.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Venue } from 'src/venue/entities/venue.entity';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Event {
@@ -26,4 +27,8 @@ export class Event {
 
   @OneToMany(() => Package, (pack) => pack.event)
   packages!: Package[];
+
+  @ManyToMany(() => Venue)
+  @JoinTable()
+  venues!: Venue[]
 }
