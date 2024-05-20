@@ -1,3 +1,4 @@
+import { Instructor } from 'src/instructor/entities/instructor.entity';
 import { Package } from 'src/package/entities/package.entity';
 import { Venue } from 'src/venue/entities/venue.entity';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -20,13 +21,23 @@ export class Event {
   description: string;
 
   @Column()
-  vanue: string;
+  slogan: string;
+
+  @Column()
+  bannerUrl: string;
+  
+  @Column()
+  packageDescription!:string
 
   @Column({ default: true })
   isActive: boolean;
 
   @OneToMany(() => Package, (pack) => pack.event)
   packages!: Package[];
+
+  @ManyToMany(() => Instructor)
+  @JoinTable()
+  instructors!: Instructor[]
 
   @ManyToMany(() => Venue)
   @JoinTable()
