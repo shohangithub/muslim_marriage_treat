@@ -14,6 +14,7 @@ import { PackageModule } from './package/package.module';
 import { MailModule } from './mail/mail.module';
 import { VenueModule } from './venue/venue.module';
 import { InstructorModule } from './instructor/instructor.module';
+import { EventScheduleModule } from './event-schedule/event-schedule.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { InstructorModule } from './instructor/instructor.module';
     MailModule,
     VenueModule,
     InstructorModule,
+    EventScheduleModule,
   ],
   controllers: [AppController],
   providers: [ TasksService, AppService],

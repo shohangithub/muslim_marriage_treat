@@ -1,3 +1,5 @@
+import { IsNotEmpty } from 'class-validator';
+import { EventSchedule } from 'src/event-schedule/entities/event-schedule.entity';
 import { Instructor } from 'src/instructor/entities/instructor.entity';
 import { Package } from 'src/package/entities/package.entity';
 import { Venue } from 'src/venue/entities/venue.entity';
@@ -35,6 +37,9 @@ export class Event {
   @OneToMany(() => Package, (pack) => pack.event)
   packages!: Package[];
 
+  @OneToMany(() => EventSchedule, (schedule) => schedule.event)
+  schedules!: EventSchedule[];
+
   @ManyToMany(() => Instructor)
   @JoinTable()
   instructors!: Instructor[]
@@ -42,4 +47,13 @@ export class Event {
   @ManyToMany(() => Venue)
   @JoinTable()
   venues!: Venue[]
+}
+
+
+
+export class EventRefDto {
+  @IsNotEmpty()
+  id: number;
+  @IsNotEmpty()
+  eventName: string;
 }
