@@ -37,7 +37,7 @@ export class CreatePackageDto {
     @IsNotEmpty()
     event: Event;
 
-    // bookedQty: number;
+    // confirmedQty: number;
     // lockedQty: number;
     // availableQty: number;
     // isActive: boolean;

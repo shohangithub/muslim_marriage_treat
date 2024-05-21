@@ -42,7 +42,10 @@ export class Package {
   totalQty: number;
 
   @Column({ default: 0 })
-  bookedQty: number;
+  reservedQty: number;
+
+  @Column({ default: 0 })
+  confirmedQty: number;
 
   @Column({ default: true })
   isActive: boolean;

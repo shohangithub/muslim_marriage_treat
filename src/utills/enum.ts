@@ -20,6 +20,7 @@ export enum BOOKING_STATUS {
   RESERVED = 'RESERVED',
   BOOKED = 'BOOKED',
   CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED',
 }
 
 export const WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];

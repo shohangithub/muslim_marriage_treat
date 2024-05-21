@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Ip, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Ip,
+  Put,
+} from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { CompleteBookingDto, UpdateBookingDto } from './dto/update-booking.dto';
@@ -8,7 +18,7 @@ export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post()
-  create(@Ip() ip: string,@Body() createBookingDto: CreateBookingDto) {
+  create(@Ip() ip: string, @Body() createBookingDto: CreateBookingDto) {
     createBookingDto.bookedFrom = ip;
     return this.bookingService.create(createBookingDto);
   }
@@ -28,12 +38,18 @@ export class BookingController {
     return this.bookingService.update(+id, updateBookingDto);
   }
 
-  
-  @Put('complete-booking/:id',)
-  completeBooking(@Param('id') id: string, @Body() updateBookingDto: CompleteBookingDto) {
+  @Put('complete-booking/:id')
+  completeBooking(
+    @Param('id') id: string,
+    @Body() updateBookingDto: CompleteBookingDto,
+  ) {
     return this.bookingService.completeBooking(+id, updateBookingDto);
   }
 
+  @Put('cancel-booking/:id')
+  cancelBooking(@Param('id') id: number) {
+    return this.bookingService.cancelBooking(id);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
