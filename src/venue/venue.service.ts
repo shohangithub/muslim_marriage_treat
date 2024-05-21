@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVenueDto } from './dto/create-venue.dto';
 import { UpdateVenueDto } from './dto/update-venue.dto';
-
+import { Venue } from './entities/venue.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+ 
 @Injectable()
 export class VenueService {
+  constructor(
+    @InjectRepository(Venue)
+    private readonly venuRepository:Repository<Venue>
+  ) {}
+ 
   create(createVenueDto: CreateVenueDto) {
-    return 'This action adds a new venue';
+    return this.venuRepository.save(createVenueDto);
   }
-
+ 
   findAll() {
-    return `This action returns all venue`;
+    return this.venuRepository.find();
   }
-
+ 
   findOne(id: number) {
-    return `This action returns a #${id} venue`;
+    return this.venuRepository.findOneBy({id})
   }
-
+ 
   update(id: number, updateVenueDto: UpdateVenueDto) {
-    return `This action updates a #${id} venue`;
+    return this.venuRepository.update(id,updateVenueDto);
   }
-
+ 
   remove(id: number) {
-    return `This action removes a #${id} venue`;
+    return this.venuRepository.delete(id);
   }
 }
+ 
