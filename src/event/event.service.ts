@@ -14,28 +14,37 @@ export class EventService {
   ) {}
 
   async create(createEventDto: CreateEventDto) {
-    console.log(createEventDto)
-    const instructors = [];
-    for (const item of createEventDto.instructors) {
-      const entity = new Instructor();
-      entity.name = item.name;
-      entity.degree = item.name;
-      entity.imageUrl = item.name;
-      await this.eventRepository.manager.save(entity);
-      instructors.push(entity);
-    }
+    // console.log(createEventDto)
+    // const instructors = [];
+    // for (const item of createEventDto.instructors) {
+    //   const entity = new Instructor();
+    //   entity.name = item.name;
+    //   entity.degree = item.name;
+    //   entity.imageUrl = item.name;
+    //   await this.eventRepository.manager.save(entity);
+    //   instructors.push(entity);
+    // }
 
-    createEventDto.instructors = instructors;
-    console.log(createEventDto)
+    // createEventDto.instructors = instructors;
+    // console.log(createEventDto)
     return this.eventRepository.save(createEventDto);
   }
 
   findAll() {
-    return this.eventRepository.find();
+    return this.eventRepository.find({
+      relations: {
+        venues: true,
+        instructors: true,
+      },
+    });
   }
 
   upcomingEvent() {
     return this.eventRepository.find({
+      relations: {
+        venues: true,
+        instructors: true,
+      },
       order: {
         startDate: 'ASC',
       },
@@ -52,7 +61,23 @@ export class EventService {
     return this.eventRepository.findOneBy({ id });
   }
 
-  update(id: number, updateEventDto: UpdateEventDto) {
+  async update(id: number, updateEventDto: UpdateEventDto) {
+    // const event = await this.eventRepository.findOne({
+    //   relations: {
+    //     venues: true,
+    //     instructors: true,
+    //   },
+    //   where: { id: id },
+    // });
+
+    // if (updateEventDto.venues) {
+    //   const  existingVanues = event.venues.filter((venue) => {
+    //     return updateEventDto.venues.findIndex((x) => x.id == venue.id) > 0;
+    //   });
+    //   event.venues = existingVanues;
+    // }
+    // await this.eventRepository.save(event);
+
     return this.eventRepository.update(id, updateEventDto);
   }
 

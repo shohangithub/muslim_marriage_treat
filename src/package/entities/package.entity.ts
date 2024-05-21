@@ -1,6 +1,6 @@
 import { Booking } from 'src/booking/entities/booking.entity';
 import { Event } from 'src/event/entities/event.entity';
-import { PACKAGE_TYPE } from 'src/utills/enum';
+import { PACKAGE_PERSON, PACKAGE_TYPE } from 'src/utills/enum';
 import {
   Column,
   Entity,
@@ -21,10 +21,13 @@ export class Package {
   packageType: PACKAGE_TYPE;
 
   @Column()
+  packagePerson: PACKAGE_PERSON;
+  
+  @Column()
   acitivities!: string;
 
   @Column({ length: 1000 })
-  facilities!: string;
+  highlightFeatures!: string;
 
   @Column({ length: 1000 })
   features!: string;
@@ -42,10 +45,10 @@ export class Package {
   bookedQty: number;
 
   @Column({ default: 0 })
-  lookedQty: number;
+  lockedQty: number;
 
   @Column({ default: 0 })
-  availablePackages: number;
+  availableQty: number;
 
   @Column({ default: true })
   isActive: boolean;

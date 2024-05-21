@@ -28,12 +28,6 @@ export class EventScheduleService {
   }
 
   findByEvent(eventId: number) {
-    console.log(eventId)
-    // return this.userRepository.find({
-    //   relations: {
-    //     event: true,
-    //   },
-    // });
     return this.userRepository.find({
       relations: { event: true },
       where: {event:{id:eventId}},

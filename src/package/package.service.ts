@@ -9,30 +9,37 @@ import { Repository } from 'typeorm';
 export class PackageService {
   constructor(
     @InjectRepository(Package)
-    private readonly userRepository: Repository<Package>,
+    private readonly packageRepository: Repository<Package>,
   ) {}
 
   create(createPackageDto: CreatePackageDto) {
-    return this.userRepository.save(createPackageDto);
+    return this.packageRepository.save(createPackageDto);
   }
 
   findAll() {
-    return this.userRepository.find({
+    return this.packageRepository.find({
       relations: {
-          event: true,
+        event: true,
       },
-  });
+    });
+  }
+
+  findByEvent(eventId: number) {
+    return this.packageRepository.find({
+      relations: { event: true },
+      where: { event: { id: eventId } },
+    });
   }
 
   findOne(id: number) {
-    return this.userRepository.findOneBy({ id });
+    return this.packageRepository.findOneBy({ id });
   }
 
   update(id: number, updatePackageDto: UpdatePackageDto) {
-    return this.userRepository.update(id, updatePackageDto);
+    return this.packageRepository.update(id, updatePackageDto);
   }
 
   remove(id: number) {
-    return this.userRepository.delete(id);
+    return this.packageRepository.delete(id);
   }
 }

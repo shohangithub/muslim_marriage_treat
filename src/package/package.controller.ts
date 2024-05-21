@@ -31,4 +31,10 @@ export class PackageController {
   remove(@Param('id') id: string) {
     return this.packageService.remove(+id);
   }
+
+  @Get('find-by-event/:id')
+  findByEvent(@Param('id') eventId: number) {
+    return this.packageService.findByEvent(eventId);
+  }
+
 }
