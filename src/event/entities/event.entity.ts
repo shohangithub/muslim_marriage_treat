@@ -13,10 +13,10 @@ export class Event {
   @Column()
   eventName: string;
 
-  @Column({type: 'datetime'})
+  @Column({type: 'date'})
   startDate: Date;
 
-  @Column({type: 'datetime'})
+  @Column({type: 'date'})
   endDate: Date;
 
   @Column()

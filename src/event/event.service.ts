@@ -4,28 +4,38 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Equal, MoreThan, Repository } from 'typeorm';
+import { Instructor } from 'src/instructor/entities/instructor.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
-    private readonly userRepository: Repository<Event>,
+    private readonly eventRepository: Repository<Event>,
   ) {}
 
-  create(createEventDto: CreateEventDto) {
-    const startDate = new Date(createEventDto.startDate).toISOString();
-    const endDate = new Date(createEventDto.endDate).toISOString();
-    createEventDto.startDate = new Date(startDate);
-    createEventDto.endDate = new Date(endDate);
-    return this.userRepository.save(createEventDto);
+  async create(createEventDto: CreateEventDto) {
+    console.log(createEventDto)
+    const instructors = [];
+    for (const item of createEventDto.instructors) {
+      const entity = new Instructor();
+      entity.name = item.name;
+      entity.degree = item.name;
+      entity.imageUrl = item.name;
+      await this.eventRepository.manager.save(entity);
+      instructors.push(entity);
+    }
+
+    createEventDto.instructors = instructors;
+    console.log(createEventDto)
+    return this.eventRepository.save(createEventDto);
   }
 
   findAll() {
-    return this.userRepository.find();
+    return this.eventRepository.find();
   }
 
   upcomingEvent() {
-    return this.userRepository.find({
+    return this.eventRepository.find({
       order: {
         startDate: 'ASC',
       },
@@ -39,14 +49,14 @@ export class EventService {
   }
 
   findOne(id: number) {
-    return this.userRepository.findOneBy({ id });
+    return this.eventRepository.findOneBy({ id });
   }
 
   update(id: number, updateEventDto: UpdateEventDto) {
-    return this.userRepository.update(id, updateEventDto);
+    return this.eventRepository.update(id, updateEventDto);
   }
 
   remove(id: number) {
-    return this.userRepository.delete(id);
+    return this.eventRepository.delete(id);
   }
 }
