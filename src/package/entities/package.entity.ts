@@ -44,12 +44,6 @@ export class Package {
   @Column({ default: 0 })
   bookedQty: number;
 
-  @Column({ default: 0 })
-  lockedQty: number;
-
-  @Column({ default: 0 })
-  availableQty: number;
-
   @Column({ default: true })
   isActive: boolean;
 

@@ -11,14 +11,22 @@ export class Booking {
   transactionMethod!: TRANS_METHOD;
 
   @Column({ unique: true, nullable: true })
-  transactionNo!: string;
+  transactionNumber!: string;
 
+  @Column({ unique: true, nullable: true })
+  confirmationCode: string;
 
   @Column()
   firstName: string;
 
   @Column()
   lastName: string;
+
+  @Column()
+  spouseFirstName: string;
+
+  @Column()
+  spouseLastName: string;
 
   @Column()
   email: string;
@@ -29,13 +37,17 @@ export class Booking {
   @Column({ default: new Date().getTime() })
   bookedTime: string;
 
-  @Column({ default: new Date((new Date().setMinutes(new Date().getMinutes()+5))).getTime()})
+  @Column({
+    default: new Date(
+      new Date().setMinutes(new Date().getMinutes() + 2),
+    ).getTime(),
+  })
   expireTime!: string;
 
   @Column()
   bookedFrom: string;
 
-  @Column({ default: BOOKING_STATUS.PENDING })
+  @Column({ default: BOOKING_STATUS.BOOKED })
   bookingStatus: BOOKING_STATUS;
 
   @ManyToOne(() => Package, (pack) => pack.bookings)

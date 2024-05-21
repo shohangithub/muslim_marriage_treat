@@ -27,7 +27,7 @@ export class PackageService {
   findByEvent(eventId: number) {
     return this.packageRepository.find({
       relations: { event: true },
-      where: { event: { id: eventId } },
+      where: [{ event: { id: eventId } }, { isActive: true }],
     });
   }
 
@@ -36,6 +36,10 @@ export class PackageService {
   }
 
   update(id: number, updatePackageDto: UpdatePackageDto) {
+    return this.packageRepository.update(id, updatePackageDto);
+  }
+
+  updateStockQuantity(id: number, updatePackageDto: UpdatePackageDto) {
     return this.packageRepository.update(id, updatePackageDto);
   }
 

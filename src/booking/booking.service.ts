@@ -1,63 +1,102 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { CompleteBookingDto, UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, LessThan, Repository } from 'typeorm';
 import { BOOKING_STATUS } from 'src/utills/enum';
+import { uuid } from 'uuidv4';
+import { PackageService } from 'src/package/package.service';
+import { ManagePackageStockDto } from 'src/package/dto/update-package.dto';
 
 @Injectable()
 export class BookingService {
+  readonly bookingExpireTime = process.env.BOOKING_EXPIRE_TIME;
   constructor(
     @InjectRepository(Booking)
-    private readonly userRepository: Repository<Booking>,
+    private readonly bookingRepository: Repository<Booking>,
+    private readonly packageService: PackageService,
   ) {}
 
   create(createBookingDto: CreateBookingDto) {
-    return this.userRepository.save(createBookingDto);
+    this.packageService.findOne(createBookingDto.package.id).then((res) => {
+      if (res) {
+        if (res.totalQty > 0) {
+          createBookingDto.transactionNumber = uuid();
+
+          const result = this.bookingRepository.save(createBookingDto);
+          const stock: ManagePackageStockDto = {
+            totalQty: res.totalQty - 1,
+            bookedQty: res.bookedQty + 1,
+          };
+          this.packageService.updateStockQuantity(res.id, stock);
+          return result;
+        } else if (res.bookedQty > 0) {
+          throw new HttpException(
+            `Someone booked this package, please try after ${this.bookingExpireTime} minutes !`,
+            HttpStatus.BAD_REQUEST,
+          );
+        } else {
+          throw new HttpException(
+            `This package already sold out. please try anohter package.`,
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      }
+    });
   }
 
   findAll() {
-    return this.userRepository.find({ relations: { package: true } });
+    return this.bookingRepository.find({ relations: { package: true } });
   }
 
   findOne(id: number) {
-    return this.userRepository.findOneBy({ id });
+    return this.bookingRepository.findOneBy({ id });
   }
 
   update(id: number, updateBookingDto: UpdateBookingDto) {
-    return this.userRepository.update(id, updateBookingDto);
+    return this.bookingRepository.update(id, updateBookingDto);
   }
 
   removeUnusedBooking() {
-    this.userRepository
+    this.bookingRepository
       .find({
+        relations: {
+          package: true,
+        },
         where: [
           {
             expireTime: LessThan(new Date().getTime().toString()),
-            bookingStatus: Equal(BOOKING_STATUS.PENDING),
+            bookingStatus: Equal(BOOKING_STATUS.BOOKED),
           },
         ],
       })
       .then((res) => {
-        // console.log(res)
-        // console.log(new Date(new Date().getTime()))
-        // console.log(new Date(1715593009978))
-        // console.log(new Date(1715596549978))
         if (res.length > 0) {
-          this.userRepository.delete(res.map((x) => x.id));
+          for (const item of res) {
+            const pack = item.package;
+            if (pack) {
+              const stock: ManagePackageStockDto = {
+                totalQty: pack.totalQty + 1,
+                bookedQty: pack.bookedQty - 1,
+              };
+              this.packageService.updateStockQuantity(pack.id, stock);
+            }
+          }
+          this.bookingRepository.delete(res.map((x) => x.id));
         }
       });
   }
+
   completeBooking(id: number, dto: CompleteBookingDto) {
-    return this.userRepository.update(id, {
+    return this.bookingRepository.update(id, {
       transactionMethod: dto.transactionMethod,
-      transactionNo: dto.transactionNo,
-      bookingStatus: BOOKING_STATUS.COMPLETED,
+      confirmationCode: dto.confirmationCode,
+      bookingStatus: BOOKING_STATUS.CONFIRMED,
     });
   }
 
   remove(id: number) {
-    return this.userRepository.delete(id);
+    return this.bookingRepository.delete(id);
   }
 }
