@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePackageDto } from './dto/create-package.dto';
-import { CancelPackageStockDto, ConfirmPackageStockDto, UpdatePackageDto } from './dto/update-package.dto';
+import { CancelPackageStockDto, CompletePackageStockDto, ConfirmPackageStockDto, UpdatePackageDto } from './dto/update-package.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Package } from './entities/package.entity';
 import { Repository } from 'typeorm';
@@ -40,6 +40,10 @@ export class PackageService {
   }
 
   updateStockQuantity(id: number, updatePackageDto: UpdatePackageDto) {
+    return this.packageRepository.update(id, updatePackageDto);
+  }
+
+  completeStockQuantity(id: number, updatePackageDto: CompletePackageStockDto) {
     return this.packageRepository.update(id, updatePackageDto);
   }
 

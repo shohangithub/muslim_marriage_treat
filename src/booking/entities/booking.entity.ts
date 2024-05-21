@@ -47,7 +47,7 @@ export class Booking {
   @Column()
   bookedFrom: string;
 
-  @Column({ default: BOOKING_STATUS.BOOKED })
+  @Column({ default: BOOKING_STATUS.RESERVED })
   bookingStatus: BOOKING_STATUS;
 
   @ManyToOne(() => Package, (pack) => pack.bookings)

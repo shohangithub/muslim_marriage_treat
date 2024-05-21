@@ -43,6 +43,9 @@ export class Package {
 
   @Column({ default: 0 })
   reservedQty: number;
+  
+  @Column({ default: 0 })
+  bookedQty: number;
 
   @Column({ default: 0 })
   confirmedQty: number;

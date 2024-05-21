@@ -9,6 +9,7 @@ import { uuid } from 'uuidv4';
 import { PackageService } from 'src/package/package.service';
 import {
   CancelPackageStockDto,
+  CompletePackageStockDto,
   ConfirmPackageStockDto,
   ManagePackageStockDto,
 } from 'src/package/dto/update-package.dto';
@@ -22,32 +23,32 @@ export class BookingService {
     private readonly packageService: PackageService,
   ) {}
 
-  create(createBookingDto: CreateBookingDto) {
-    this.packageService.findOne(createBookingDto.package.id).then((res) => {
-      if (res) {
-        if (res.totalQty > 0) {
-          createBookingDto.transactionNumber = uuid();
+  async create(createBookingDto: CreateBookingDto) {
+    const res = await this.packageService.findOne(createBookingDto.package.id);
+    if (res) {
+      if (res.totalQty > 0) {
+        createBookingDto.transactionNumber = uuid();
 
-          const result = this.bookingRepository.save(createBookingDto);
-          const stock: ManagePackageStockDto = {
-            totalQty: res.totalQty - 1,
-            reservedQty: res.reservedQty + 1,
-          };
-          this.packageService.updateStockQuantity(res.id, stock);
-          return result;
-        } else if (res.confirmedQty > 0) {
-          throw new HttpException(
-            `Someone booked this package, please try after ${this.bookingExpireTime} minutes !`,
-            HttpStatus.BAD_REQUEST,
-          );
-        } else {
-          throw new HttpException(
-            `This package already sold out. please try anohter package.`,
-            HttpStatus.BAD_REQUEST,
-          );
-        }
+        const result = this.bookingRepository.save(createBookingDto);
+        const stock: ManagePackageStockDto = {
+          totalQty: res.totalQty - 1,
+          reservedQty: res.reservedQty + 1,
+        };
+        this.packageService.updateStockQuantity(res.id, stock);
+        return result;
+      } else if (res.confirmedQty > 0) {
+        throw new HttpException(
+          `Someone booked this package, please try after ${this.bookingExpireTime} minutes !`,
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        throw new HttpException(
+          `This package already sold out. please try anohter package.`,
+          HttpStatus.BAD_REQUEST,
+        );
       }
-    });
+    }
+    throw new HttpException(`Booking data not found.`, HttpStatus.BAD_REQUEST);
   }
 
   findAll() {
@@ -108,16 +109,45 @@ export class BookingService {
     if (response) {
       const pack = response.package;
       if (pack) {
-        const stock: ConfirmPackageStockDto = {
+        const stock: CompletePackageStockDto = {
+          bookedQty: pack.bookedQty + 1,
           reservedQty: pack.reservedQty - 1,
-          confirmedQty: pack.confirmedQty + 1,
         };
-        this.packageService.confirmStockQuantity(pack.id, stock);
+        await this.packageService.completeStockQuantity(pack.id, stock);
       }
 
       return this.bookingRepository.update(id, {
         transactionMethod: dto.transactionMethod,
         confirmationCode: dto.confirmationCode,
+        bookingStatus: BOOKING_STATUS.BOOKED,
+      });
+    }
+  }
+
+  async confirmBooking(id: number) {
+    const response = await this.bookingRepository.findOne({
+      relations: {
+        package: true,
+      },
+      where: [
+        {
+          id: id,
+          bookingStatus: Equal(BOOKING_STATUS.BOOKED),
+        },
+      ],
+    });
+
+    if (response) {
+      const pack = response.package;
+      if (pack) {
+        const stock: ConfirmPackageStockDto = {
+          bookedQty: pack.bookedQty - 1,
+          confirmedQty: pack.confirmedQty + 1,
+        };
+        await this.packageService.confirmStockQuantity(pack.id, stock);
+      }
+
+      return this.bookingRepository.update(id, {
         bookingStatus: BOOKING_STATUS.CONFIRMED,
       });
     }
@@ -143,7 +173,7 @@ export class BookingService {
           totalQty: pack.totalQty + 1,
           confirmedQty: pack.confirmedQty - 1,
         };
-        this.packageService.cancelStockQuantity(pack.id, stock);
+        await this.packageService.cancelStockQuantity(pack.id, stock);
       }
 
       return this.bookingRepository.update(id, {

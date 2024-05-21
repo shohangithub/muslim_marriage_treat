@@ -14,11 +14,23 @@ export class ManagePackageStockDto {
   reservedQty: number;
 }
 
-export class ConfirmPackageStockDto {
+export class CompletePackageStockDto {
     
   @IsNumber()
   @Min(0)
   reservedQty: number;
+
+  @IsNumber()
+  @Min(0)
+  bookedQty: number;
+
+}
+
+export class ConfirmPackageStockDto {
+    
+  @IsNumber()
+  @Min(0)
+  bookedQty: number;
 
   @IsNumber()
   @Min(0)
