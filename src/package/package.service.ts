@@ -34,7 +34,7 @@ export class PackageService {
   findOne(id: number) {
     return this.packageRepository.findOne({
       relations: { event: true },
-      where: [{ event: { id: id } }],
+      where: [ { id: id }],
     });
   }
 
