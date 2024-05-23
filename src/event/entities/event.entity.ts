@@ -4,6 +4,7 @@ import { Instructor } from 'src/instructor/entities/instructor.entity';
 import { Package } from 'src/package/entities/package.entity';
 import { Venue } from 'src/venue/entities/venue.entity';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { EventGallery } from './eventgallery.entity';
 
 @Entity()
 export class Event {
@@ -27,6 +28,9 @@ export class Event {
 
   @Column()
   bannerUrl: string;
+
+  @OneToMany(() => EventGallery, (gallery) => gallery.event)
+  galleries: EventGallery[];
   
   @Column()
   packageDescription!:string

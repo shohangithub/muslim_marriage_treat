@@ -3,6 +3,7 @@ import { IsDate, IsNotEmpty, MinDate } from 'class-validator';
 import { EventSchedule } from 'src/event-schedule/entities/event-schedule.entity';
 import { Instructor } from 'src/instructor/entities/instructor.entity';
 import { Package } from 'src/package/entities/package.entity';
+import { Venue } from 'src/venue/entities/venue.entity';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -23,10 +24,10 @@ export class CreateEventDto {
   slogan: string;
   packageDescription: string;
   @IsNotEmpty()
-  bannerUrl: string;
+  bannersUrl: string[];
   isActive: boolean;
   packages: Package[];
   schedules: EventSchedule[];
   instructors: Instructor[];
-  venues: Instructor[];
+  venues: Venue[];
 }

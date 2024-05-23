@@ -5,12 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Equal, MoreThan, Repository } from 'typeorm';
 import { Instructor } from 'src/instructor/entities/instructor.entity';
+import {  AddGalleryToEventDto } from './dto/add-gallery-to-even.dto';
+import { EventGallery } from './entities/eventgallery.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
+    @InjectRepository(EventGallery)
+    private readonly bannerRepository: Repository<EventGallery>,
   ) {}
 
   async create(createEventDto: CreateEventDto) {
@@ -27,7 +31,17 @@ export class EventService {
 
     // createEventDto.instructors = instructors;
     // console.log(createEventDto)
-    return this.eventRepository.save(createEventDto);
+
+    var event = await this.eventRepository.save(createEventDto);
+    console.log(event);
+    const banners = createEventDto.bannersUrl.map((bannerUrl) => {
+      const banner = new EventGallery();
+      banner.imgUrl = bannerUrl;
+      banner.event = event;
+      return banner;
+    });
+    await this.bannerRepository.save(banners);
+    return event;
   }
 
   findAll() {
@@ -35,6 +49,7 @@ export class EventService {
       relations: {
         venues: true,
         instructors: true,
+        galleries:true
       },
     });
   }
@@ -44,6 +59,7 @@ export class EventService {
       relations: {
         venues: true,
         instructors: true,
+        galleries:true
       },
       order: {
         startDate: 'ASC',
@@ -84,4 +100,25 @@ export class EventService {
   remove(id: number) {
     return this.eventRepository.delete(id);
   }
+  async removeBanner(bannerId: number) {
+    return this.bannerRepository.delete(bannerId);
+  }
+  async addBannerToEvent(addGalleryToEventDto:AddGalleryToEventDto ) {
+    const id=addGalleryToEventDto.eventId;
+    const event = await this.eventRepository.findOneBy({id});
+    const banner = new EventGallery();
+    if (event) {
+      banner.imgUrl = addGalleryToEventDto.bannerUrl;
+      banner.event = event;
+    }
+    return this.bannerRepository.save(banner);
+  }
+  async updateBanner(id:number, bannerUrl: string){
+    const banner=await this.bannerRepository.findOneBy({id});
+    if(banner){
+      banner.imgUrl=bannerUrl;
+    }
+    return this.bannerRepository.update(id,banner);
+  }
+  
 }
