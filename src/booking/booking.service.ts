@@ -13,6 +13,7 @@ import {
   ConfirmPackageStockDto,
   ManagePackageStockDto,
 } from 'src/package/dto/update-package.dto';
+import { PaginationQuery } from 'src/utills/pagination';
 
 @Injectable()
 export class BookingService {
@@ -48,7 +49,59 @@ export class BookingService {
         );
       }
     }
-    throw new HttpException(`Booking data not found.`, HttpStatus.BAD_REQUEST);
+    throw new HttpException(`Package not found.`, HttpStatus.BAD_REQUEST);
+  }
+
+  async pagination(paginationQuery: PaginationQuery) {
+    console.log(paginationQuery);
+
+    if (!paginationQuery)
+      throw new HttpException(
+        `Invalid query parameters !`,
+        HttpStatus.BAD_REQUEST,
+      );
+    if (
+      paginationQuery &&
+      (paginationQuery.pageIndex < 0 || paginationQuery.pageSize == 0)
+    )
+      throw new HttpException(
+        `Invalid query parameters !`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const query = this.bookingRepository
+      .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
+      //.innerJoinAndSelect("booking.package", "package")
+      //.leftJoinAndSelect('booking.package', 'package');
+    //.where("booking. = true")
+    //.where(`"tenant_id" ILIKE '${OP}'`)
+    .where('LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)', {
+      name: `%${paginationQuery.openText}%`,
+  })
+    //.andWhere("(booking.name = :photoName OR photo.name = :bearName)")
+
+    const totalCount = await query.getCount();
+    const data = await query
+      .orderBy(
+        'booking.id',
+        (paginationQuery.isAscending=='true' ? 'ASC' : 'DESC'),
+      )
+      .skip(paginationQuery.pageIndex * paginationQuery.pageSize)
+      .take(paginationQuery.pageSize)
+      //.setParameters({ photoName: "My", bearName: "Mishka" })
+      .getMany();
+    const response = {
+      data: data,
+      paging: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        pageSize: 20,
+        pageIndex: 0,
+        totalData: totalCount,
+        totalPages: 0,
+      },
+    };
+    return response;
   }
 
   findAll() {
