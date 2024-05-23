@@ -22,7 +22,8 @@ export class AzureBlobService {
     this.containerName = containerName;
     const imgUrl = uuid() + file.originalname;
     const blobClient = this.getBlobClient(imgUrl);
-    await blobClient.uploadData(file.buffer);
+    const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+    await blobClient.uploadData(file.buffer,blobOptions);
     return imgUrl;
   }
   //   read file from azureblob
