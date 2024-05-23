@@ -32,7 +32,10 @@ export class PackageService {
   }
 
   findOne(id: number) {
-    return this.packageRepository.findOneBy({ id });
+    return this.packageRepository.findOne({
+      relations: { event: true },
+      where: [{ event: { id: id } }],
+    });
   }
 
   update(id: number, updatePackageDto: UpdatePackageDto) {
