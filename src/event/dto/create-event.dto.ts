@@ -23,8 +23,7 @@ export class CreateEventDto {
   @IsNotEmpty()
   slogan: string;
   packageDescription: string;
-  @IsNotEmpty()
-  bannersUrl: string[];
+  bannerUrl: string;
   isActive: boolean;
   packages: Package[];
   schedules: EventSchedule[];

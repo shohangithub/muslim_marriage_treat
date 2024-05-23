@@ -4,7 +4,6 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Equal, MoreThan, Repository } from 'typeorm';
-import { Instructor } from 'src/instructor/entities/instructor.entity';
 import {  AddGalleryToEventDto } from './dto/add-gallery-to-even.dto';
 import { EventGallery } from './entities/eventgallery.entity';
 
@@ -18,30 +17,7 @@ export class EventService {
   ) {}
 
   async create(createEventDto: CreateEventDto) {
-    // console.log(createEventDto)
-    // const instructors = [];
-    // for (const item of createEventDto.instructors) {
-    //   const entity = new Instructor();
-    //   entity.name = item.name;
-    //   entity.degree = item.name;
-    //   entity.imageUrl = item.name;
-    //   await this.eventRepository.manager.save(entity);
-    //   instructors.push(entity);
-    // }
-
-    // createEventDto.instructors = instructors;
-    // console.log(createEventDto)
-
-    var event = await this.eventRepository.save(createEventDto);
-    console.log(event);
-    const banners = createEventDto.bannersUrl.map((bannerUrl) => {
-      const banner = new EventGallery();
-      banner.imgUrl = bannerUrl;
-      banner.event = event;
-      return banner;
-    });
-    await this.bannerRepository.save(banners);
-    return event;
+    return this.eventRepository.save(createEventDto);
   }
 
   findAll() {
