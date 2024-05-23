@@ -32,11 +32,7 @@ export class EventService {
 
   upcomingEvent() {
     return this.eventRepository.find({
-      relations: {
-        venues: true,
-        instructors: true,
-        galleries:true
-      },
+     
       order: {
         startDate: 'ASC',
       },
@@ -50,7 +46,18 @@ export class EventService {
   }
 
   findOne(id: number) {
-    return this.eventRepository.findOneBy({ id });
+    return this.eventRepository.findOne({
+      relations: {
+        venues: true,
+        instructors: true,
+        galleries:true
+      },
+      where: [
+        {
+          id: id
+        },
+      ],
+    });
   }
 
   async update(id: number, updateEventDto: UpdateEventDto) {
