@@ -21,10 +21,10 @@ import { EventScheduleModule } from './event-schedule/event-schedule.module';
     AzureBlobModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'http://sql12.freemysqlhosting.net',
       port: 3303,
-      username: 'sa',
-      password: '1qazZAQ!',
+      username: 'sql12707960',
+      password: 'dKMwAx6JEu',
       database: 'muslim_marriage_treat',
       entities: [__dirname + '/../**/*.entity.js'],
       synchronize: true,
