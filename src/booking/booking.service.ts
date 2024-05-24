@@ -68,12 +68,13 @@ export class BookingService {
         `Invalid query parameters !`,
         HttpStatus.BAD_REQUEST,
       );
-
+     
+    
     const query = this.bookingRepository
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       //.innerJoinAndSelect("booking.package", "package")
       //.leftJoinAndSelect('booking.package', 'package');
-    .where("booking.bookingStatus NOT  RESERVED")
+    .where(`booking.bookingStatus != ${BOOKING_STATUS.RESERVED}`)
     .andWhere('LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)', {
       name: `%${paginationQuery.openText}%`,
   })
