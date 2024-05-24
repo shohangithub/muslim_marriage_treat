@@ -13,11 +13,27 @@ export class MailService {
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
       subject: 'Welcome to Nice App! Confirm your Email',
-      template: './confirmation', // `.hbs` extension is appended automatically
-      context: { // ✏️ filling curly brackets with content
+      template: './booking', // `.hbs` extension is appended automatically
+      context: {
+        // ✏️ filling curly brackets with content
         name: user.firstName,
         url,
       },
+    });
+  }
+
+  async sendEmailwithTemplate(
+    emailAddress: string,
+    templateUrl: string,
+    subject?: string,
+    context?: any,
+  ) {
+    await this.mailerService.sendMail({
+      to: emailAddress,
+      // from: '"Support Team" <support@example.com>', // override default from
+      subject: subject,
+      template: templateUrl, // `.hbs` extension is appended automatically
+      context: context,
     });
   }
 }

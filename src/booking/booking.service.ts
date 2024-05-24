@@ -14,6 +14,7 @@ import {
   ManagePackageStockDto,
 } from 'src/package/dto/update-package.dto';
 import { PaginationQuery } from 'src/utills/pagination';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class BookingService {
@@ -22,6 +23,7 @@ export class BookingService {
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
     private readonly packageService: PackageService,
+    private readonly mailService: MailService,
   ) {}
 
   async create(createBookingDto: CreateBookingDto) {
@@ -53,7 +55,6 @@ export class BookingService {
   }
 
   async pagination(paginationQuery: PaginationQuery) {
-  
     if (!paginationQuery)
       throw new HttpException(
         `Invalid query parameters !`,
@@ -67,24 +68,26 @@ export class BookingService {
         `Invalid query parameters !`,
         HttpStatus.BAD_REQUEST,
       );
-     
-    
+
     const query = this.bookingRepository
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       //.innerJoinAndSelect("booking.package", "package")
       //.leftJoinAndSelect('booking.package', 'package');
-    .where(`booking.bookingStatus != :status`)
-    .andWhere('LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)', {
-      name: `%${paginationQuery.openText}%`,
-      status: BOOKING_STATUS.RESERVED,
-  })
+      .where(`booking.bookingStatus != :status`)
+      .andWhere(
+        'LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)',
+        {
+          name: `%${paginationQuery.openText}%`,
+          status: BOOKING_STATUS.RESERVED,
+        },
+      );
     //.andWhere("(booking.name = :photoName OR photo.name = :bearName)")
 
     const totalCount = await query.getCount();
     const data = await query
       .orderBy(
         'booking.id',
-        (paginationQuery.isAscending=='true' ? 'ASC' : 'DESC'),
+        paginationQuery.isAscending == 'true' ? 'ASC' : 'DESC',
       )
       .skip(paginationQuery.pageIndex * paginationQuery.pageSize)
       .take(paginationQuery.pageSize)
@@ -168,12 +171,21 @@ export class BookingService {
         };
         await this.packageService.completeStockQuantity(pack.id, stock);
       }
-
+      this.mailService.sendEmailwithTemplate(
+        response.email,
+        './booking',
+        'Package Booking Information',
+        {
+          name: response.firstName + ' ' + response.lastName,
+          bookingMoney: dto.bookingMoney,
+          packageName: pack.packageName,
+        },
+      );
       return this.bookingRepository.update(id, {
         transactionMethod: dto.transactionMethod,
         confirmationCode: dto.confirmationCode,
         bookingStatus: BOOKING_STATUS.BOOKED,
-        bookingMoney:dto.bookingMoney
+        bookingMoney: dto.bookingMoney,
       });
     }
   }
@@ -200,6 +212,16 @@ export class BookingService {
         };
         await this.packageService.confirmStockQuantity(pack.id, stock);
       }
+
+      this.mailService.sendEmailwithTemplate(
+        response.email,
+        './confirmation',
+        'Package Confirmation',
+        {
+          name: response.firstName + ' ' + response.lastName,
+          packageName: pack.packageName,
+        },
+      );
 
       return this.bookingRepository.update(id, {
         bookingStatus: BOOKING_STATUS.CONFIRMED,
