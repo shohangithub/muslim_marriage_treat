@@ -34,6 +34,9 @@ export class Booking {
   @Column()
   phone: string;
 
+  @Column({ default: 0 })
+  bookingMoney: number;
+
   @Column({ default: new Date().getTime() })
   bookedTime: string;
 
