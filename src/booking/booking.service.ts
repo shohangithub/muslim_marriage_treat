@@ -173,6 +173,7 @@ export class BookingService {
         transactionMethod: dto.transactionMethod,
         confirmationCode: dto.confirmationCode,
         bookingStatus: BOOKING_STATUS.BOOKED,
+        bookingMoney:dto.bookingMoney
       });
     }
   }
