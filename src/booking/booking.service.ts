@@ -53,8 +53,7 @@ export class BookingService {
   }
 
   async pagination(paginationQuery: PaginationQuery) {
-    console.log(paginationQuery);
-
+  
     if (!paginationQuery)
       throw new HttpException(
         `Invalid query parameters !`,
@@ -74,9 +73,10 @@ export class BookingService {
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       //.innerJoinAndSelect("booking.package", "package")
       //.leftJoinAndSelect('booking.package', 'package');
-    .where(`booking.bookingStatus != ${BOOKING_STATUS.RESERVED}`)
+    .where(`booking.bookingStatus != :status`)
     .andWhere('LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)', {
       name: `%${paginationQuery.openText}%`,
+      status: BOOKING_STATUS.RESERVED,
   })
     //.andWhere("(booking.name = :photoName OR photo.name = :bearName)")
 
