@@ -22,15 +22,24 @@ export class Package {
 
   @Column()
   packagePerson: PACKAGE_PERSON;
-  
-  @Column()
-  acitivities!: string;
 
   @Column({ length: 1000 })
   highlightFeatures!: string;
 
   @Column({ length: 1000 })
-  features!: string;
+  roomFeatures!: string;
+
+  @Column({ length: 1000 })
+  houseFeatures!: string;
+
+  @Column()
+  houseFeatureNote!: string;
+
+  @Column({ length: 1500 })
+  packageDeal!: string;
+
+  @Column()
+  packageDealNote!: string;
 
   @ManyToOne(() => Event, (event) => event.packages)
   event: Event;
@@ -43,7 +52,7 @@ export class Package {
 
   @Column({ default: 0 })
   reservedQty: number;
-  
+
   @Column({ default: 0 })
   bookedQty: number;
 

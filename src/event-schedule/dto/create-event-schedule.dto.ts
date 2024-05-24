@@ -18,7 +18,7 @@ export class CreateEventScheduleDto {
   timeRange: string;
 
   @IsNotEmpty()
-  acitivity: string;
+  activity: string;
   description!: string;
   isActive!: boolean;
 }

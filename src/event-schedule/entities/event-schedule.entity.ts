@@ -19,7 +19,7 @@ export class EventSchedule {
   timeRange: string
 
   @Column()
-  acitivity: string
+  activity: string
 
   @Column({nullable: true})
   description?: string;
