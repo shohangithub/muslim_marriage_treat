@@ -188,6 +188,7 @@ export class BookingService {
         bookingMoney: dto.bookingMoney,
       });
     }
+    throw new HttpException(`Booking data not found.`, HttpStatus.BAD_REQUEST);
   }
 
   async confirmBooking(id: number) {
