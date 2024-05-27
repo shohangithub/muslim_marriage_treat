@@ -33,14 +33,16 @@ export class BookingService {
         console.log("package: "+res)
         createBookingDto.transactionNumber = uuid();
 
-        const result = this.bookingRepository.save(createBookingDto);
+        const result = await this.bookingRepository.save(createBookingDto);
         const stock: ManagePackageStockDto = {
           totalQty: res.totalQty - 1,
           reservedQty: res.reservedQty + 1,
         };
-        console.log("current-stock: "+stock)
-        console.log("package id: "+res.id)
-        this.packageService.updateStockQuantity(res.id, stock);
+        console.log("current-stock: ")
+        console.log(stock)
+        console.log("package id: ")
+        console.log(res.id)
+        await this.packageService.updateStockQuantity(res.id, stock);
         console.log("response: "+result)
         return result;
       } else if (res.totalQty == 0 && res.reservedQty == 0) {
