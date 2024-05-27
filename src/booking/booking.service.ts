@@ -30,6 +30,7 @@ export class BookingService {
     const res = await this.packageService.findOne(createBookingDto.package.id);
     if (res) {
       if (res.totalQty > 0) {
+        console.log("package: "+res)
         createBookingDto.transactionNumber = uuid();
 
         const result = this.bookingRepository.save(createBookingDto);
@@ -37,7 +38,10 @@ export class BookingService {
           totalQty: res.totalQty - 1,
           reservedQty: res.reservedQty + 1,
         };
+        console.log("current-stock: "+stock)
+        console.log("package id: "+res.id)
         this.packageService.updateStockQuantity(res.id, stock);
+        console.log("response: "+result)
         return result;
       } else if (res.totalQty == 0 && res.reservedQty == 0) {
         throw new HttpException(
