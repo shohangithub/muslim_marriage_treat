@@ -39,14 +39,19 @@ export class BookingService {
         };
         this.packageService.updateStockQuantity(res.id, stock);
         return result;
-      } else if (res.confirmedQty > 0) {
+      } else if (res.totalQty == 0 && res.reservedQty == 0) {
+        throw new HttpException(
+          `This package already sold out. please try anohter.`,
+          HttpStatus.BAD_REQUEST,
+        );
+      } else if (res.totalQty == 0 && res.reservedQty > 0) {
         throw new HttpException(
           `Someone booked this package, please try after ${this.bookingExpireTime} minutes !`,
           HttpStatus.BAD_REQUEST,
         );
       } else {
         throw new HttpException(
-          `This package already sold out. please try anohter package.`,
+          `An error occured.`,
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -150,9 +155,14 @@ export class BookingService {
   }
 
   async completeBooking(id: number, dto: CompleteBookingDto) {
-    const isDuplicateCode = await this.bookingRepository.existsBy({confirmationCode:dto.confirmationCode});
-    if(isDuplicateCode)
-      throw new HttpException(`Invalid confirmation code.`, HttpStatus.BAD_REQUEST);
+    const isDuplicateCode = await this.bookingRepository.existsBy({
+      confirmationCode: dto.confirmationCode,
+    });
+    if (isDuplicateCode)
+      throw new HttpException(
+        `Invalid confirmation code.`,
+        HttpStatus.BAD_REQUEST,
+      );
 
     const response = await this.bookingRepository.findOne({
       relations: {
