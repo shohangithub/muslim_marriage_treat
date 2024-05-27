@@ -37,14 +37,10 @@ export class Booking {
   @Column({ default: 0 })
   bookingMoney: number;
 
-  @Column({ default: new Date().getTime() })
+  @Column()
   bookedTime: string;
 
-  @Column({
-    default: new Date(
-      new Date().setMinutes(new Date().getMinutes() + 5),
-    ).getTime(),
-  })
+  @Column()
   expireTime!: string;
 
   @Column()

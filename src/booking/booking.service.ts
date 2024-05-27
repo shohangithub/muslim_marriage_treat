@@ -39,6 +39,8 @@ export class BookingService {
         console.log(new Date().getTime().toString())
         console.log("package: " + res)
         createBookingDto.transactionNumber = uuid();
+        createBookingDto.bookedFrom = new Date().getTime().toString(); 
+        createBookingDto.expireTime = new Date(new Date().setMinutes(new Date().getMinutes() + parseInt(this.bookingExpireTime))).getTime().toString(); 
 
         const result = await this.bookingRepository.save(createBookingDto);
         const stock: ManagePackageStockDto = {
