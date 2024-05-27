@@ -183,6 +183,7 @@ export class BookingService {
           name: response.firstName + ' ' + response.lastName,
           bookingMoney: dto.bookingMoney,
           packageName: pack.packageName,
+          roomName: pack.roomName,
         },
       );
       return this.bookingRepository.update(id, {
