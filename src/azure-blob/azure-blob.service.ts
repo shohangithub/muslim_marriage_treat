@@ -20,7 +20,7 @@ export class AzureBlobService {
 
   async upload(file: Express.Multer.File, containerName: string) {
     this.containerName = containerName;
-    const imgUrl = uuid() + file.originalname;
+    const imgUrl = uuid();
     const blobClient = this.getBlobClient(imgUrl);
     const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
     await blobClient.uploadData(file.buffer, blobOptions);
