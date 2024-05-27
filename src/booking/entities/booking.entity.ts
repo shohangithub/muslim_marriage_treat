@@ -42,7 +42,7 @@ export class Booking {
 
   @Column({
     default: new Date(
-      new Date().setMinutes(new Date().getMinutes() + 2),
+      new Date().setMinutes(new Date().getMinutes() + 5),
     ).getTime(),
   })
   expireTime!: string;
