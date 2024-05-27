@@ -15,6 +15,7 @@ import {
 } from 'src/package/dto/update-package.dto';
 import { PaginationQuery } from 'src/utills/pagination';
 import { MailService } from 'src/mail/mail.service';
+import { Package } from 'src/package/entities/package.entity';
 
 @Injectable()
 export class BookingService {
@@ -22,15 +23,20 @@ export class BookingService {
   constructor(
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
-    private readonly packageService: PackageService,
+    @InjectRepository(Package)
+    private readonly packageRepository: Repository<Package>,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
   async create(createBookingDto: CreateBookingDto) {
-    const res = await this.packageService.findOne(createBookingDto.package.id);
+    const res = await this.packageRepository.findOne({
+      relations: { event: true },
+      where: [{ id: createBookingDto.package.id }],
+    });
+
     if (res) {
       if (res.totalQty > 0) {
-        console.log("package: "+res)
+        console.log("package: " + res)
         createBookingDto.transactionNumber = uuid();
 
         const result = await this.bookingRepository.save(createBookingDto);
@@ -42,8 +48,8 @@ export class BookingService {
         console.log(stock)
         console.log("package id: ")
         console.log(res.id)
-        await this.packageService.updateStockQuantity(res.id, stock);
-        console.log("response: "+result)
+        await this.packageRepository.update(res.id, stock)
+        console.log("response: " + result)
         return result;
       } else if (res.totalQty == 0 && res.reservedQty == 0) {
         throw new HttpException(
@@ -152,7 +158,7 @@ export class BookingService {
                 totalQty: pack.totalQty + 1,
                 reservedQty: pack.reservedQty - 1,
               };
-              this.packageService.updateStockQuantity(pack.id, stock);
+              this.packageRepository.update(pack.id, stock);
             }
           }
           this.bookingRepository.delete(res.map((x) => x.id));
@@ -189,7 +195,7 @@ export class BookingService {
           bookedQty: pack.bookedQty + 1,
           reservedQty: pack.reservedQty - 1,
         };
-        await this.packageService.completeStockQuantity(pack.id, stock);
+        await this.packageRepository.update(pack.id, stock);
       }
       this.mailService.sendEmailwithTemplate(
         response.email,
@@ -232,7 +238,7 @@ export class BookingService {
           bookedQty: pack.bookedQty - 1,
           confirmedQty: pack.confirmedQty + 1,
         };
-        await this.packageService.confirmStockQuantity(pack.id, stock);
+        await this.packageRepository.update(pack.id, stock);
       }
 
       this.mailService.sendEmailwithTemplate(
@@ -271,7 +277,7 @@ export class BookingService {
           totalQty: pack.totalQty + 1,
           confirmedQty: pack.confirmedQty - 1,
         };
-        await this.packageService.cancelStockQuantity(pack.id, stock);
+        await this.packageRepository.update(pack.id, stock);
       }
 
       return this.bookingRepository.update(id, {
