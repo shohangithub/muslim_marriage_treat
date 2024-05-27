@@ -50,7 +50,10 @@ export class BookingService {
           HttpStatus.BAD_REQUEST,
         );
       } else {
-        throw new HttpException(`An error occured.`, HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          `An error occured.`,
+          HttpStatus.BAD_REQUEST,
+        );
       }
     }
     throw new HttpException(`Package not found.`, HttpStatus.BAD_REQUEST);
@@ -226,11 +229,7 @@ export class BookingService {
         await this.packageService.confirmStockQuantity(pack.id, stock);
       }
 
-      const result = await this.bookingRepository.update(id, {
-        bookingStatus: BOOKING_STATUS.CONFIRMED,
-      });
-
-      await this.mailService.sendEmailwithTemplate(
+      this.mailService.sendEmailwithTemplate(
         response.email,
         './confirmation',
         'Package Confirmation',
@@ -239,8 +238,10 @@ export class BookingService {
           packageName: pack.packageName,
         },
       );
-      
-      return result;
+
+      return this.bookingRepository.update(id, {
+        bookingStatus: BOOKING_STATUS.CONFIRMED,
+      });
     }
   }
 

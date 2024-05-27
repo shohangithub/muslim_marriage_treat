@@ -57,7 +57,7 @@ export class BookingController {
   cancelBooking(@Param('id') id: number) {
     return this.bookingService.cancelBooking(id);
   }
-  @Get('confirm-booking/:id')
+  @Put('confirm-booking/:id')
   confirmBooking(@Param('id') id: number) {
     return this.bookingService.confirmBooking(id);
   }
