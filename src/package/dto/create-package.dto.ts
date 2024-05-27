@@ -3,6 +3,10 @@ import { Event } from 'src/event/entities/event.entity';
 import { PACKAGE_PERSON, PACKAGE_TYPE } from 'src/utills/enum';
 
 export class CreatePackageDto {
+
+  
+  roomName: string;
+  
   @IsNotEmpty()
   packageName: string;
 

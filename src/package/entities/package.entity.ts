@@ -14,6 +14,9 @@ export class Package {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({nullable:true})
+  roomName!: string;
+
   @Column()
   packageName: string;
 
