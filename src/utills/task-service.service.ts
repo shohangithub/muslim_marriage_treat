@@ -10,7 +10,7 @@ export class TasksService {
   @Cron(CronExpression.EVERY_30_SECONDS)
   handleCron() {
     this.logger.debug('Operation start');
-    this.bookingRepository.removeUnusedBooking();
+    // this.bookingRepository.removeUnusedBooking();
     this.logger.debug('Operation completed');
   }
 }
