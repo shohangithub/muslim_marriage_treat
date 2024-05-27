@@ -36,6 +36,7 @@ export class BookingService {
 
     if (res) {
       if (res.totalQty > 0) {
+        console.log(new Date().getTime().toString())
         console.log("package: " + res)
         createBookingDto.transactionNumber = uuid();
 
