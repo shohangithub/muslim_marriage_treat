@@ -7,7 +7,7 @@ export class TasksService {
   constructor(private readonly bookingRepository: BookingService) {}
   private readonly logger = new Logger(TasksService.name);
 
-  @Cron(CronExpression.EVERY_12_HOURS)
+  @Cron(CronExpression.EVERY_5_MINUTES)
   handleCron() {
     this.logger.debug('Operation start');
     this.bookingRepository.removeUnusedBooking();

@@ -150,6 +150,10 @@ export class BookingService {
   }
 
   async completeBooking(id: number, dto: CompleteBookingDto) {
+    const isDuplicateCode = await this.bookingRepository.existsBy({confirmationCode:dto.confirmationCode});
+    if(isDuplicateCode)
+      throw new HttpException(`Invalid confirmation code.`, HttpStatus.BAD_REQUEST);
+
     const response = await this.bookingRepository.findOne({
       relations: {
         package: true,
