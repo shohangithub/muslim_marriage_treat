@@ -5,14 +5,11 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
-  Put,
+  Delete
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { AddGalleryToEventDto } from '../package/dto/add-gallery-to-even.dto';
-import { UpdateGalleryImageDto } from '../package/dto/update-galleryimage.dto';
 
 @Controller('event')
 export class EventController {

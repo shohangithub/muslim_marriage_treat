@@ -23,8 +23,11 @@ export class AzureBlobService {
     const imgUrl = uuid() + file.originalname;
     const blobClient = this.getBlobClient(imgUrl);
     const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
-    await blobClient.uploadData(file.buffer,blobOptions);
-    return imgUrl;
+    await blobClient.uploadData(file.buffer, blobOptions);
+    return (
+      `https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/` +
+      imgUrl
+    );
   }
   //   read file from azureblob
   async getfile(fileName: string, containerName: string) {
