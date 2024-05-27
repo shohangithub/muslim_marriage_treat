@@ -11,8 +11,8 @@ import {
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { AddGalleryToEventDto } from './dto/add-gallery-to-even.dto';
-import { UpdateGalleryImageDto } from './dto/update-galleryimage.dto';
+import { AddGalleryToEventDto } from '../package/dto/add-gallery-to-even.dto';
+import { UpdateGalleryImageDto } from '../package/dto/update-galleryimage.dto';
 
 @Controller('event')
 export class EventController {
@@ -47,19 +47,5 @@ export class EventController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.eventService.remove(+id);
-  }
-
-  @Delete('removegalleryimage/:id')
-  RemoveBanner(@Param('id') id: number) {
-    return this.eventService.removeBanner(+id);
-  }
-
-  @Post("addimagetoevent")
-  addBannerToEvent(@Body() addGalleryToEventDto:AddGalleryToEventDto  ) {
-    return this.eventService.addBannerToEvent(addGalleryToEventDto);
-  }
-  @Put('updategalleryimage')
-  updateBanner(@Body() bannerData:UpdateGalleryImageDto) {
-    return this.eventService.updateBanner(bannerData.id, bannerData.bannerUrl);
   }
 }

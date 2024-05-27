@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { PackageService } from './package.service';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
+import { UpdateGalleryImageDto } from './dto/update-galleryimage.dto';
+import { AddPackageGalleryDto } from './dto/add-gallery-to-even.dto';
 
 @Controller('package')
 export class PackageController {
@@ -35,6 +37,21 @@ export class PackageController {
   @Get('find-by-event/:id')
   findByEvent(@Param('id') eventId: number) {
     return this.packageService.findByEvent(eventId);
+  }
+
+  
+  @Delete('removegalleryimage/:id')
+  RemoveBanner(@Param('id') id: number) {
+    return this.packageService.removeGallery(+id);
+  }
+
+  @Post("addimagetoevent")
+  addBannerToEvent(@Body() addGalleryToEventDto:AddPackageGalleryDto  ) {
+    return this.packageService.addGallery(addGalleryToEventDto);
+  }
+  @Put('updategalleryimage')
+  updateBanner(@Body() bannerData:UpdateGalleryImageDto) {
+    return this.packageService.updateGallery(bannerData.id, bannerData.bannerUrl);
   }
 
 }

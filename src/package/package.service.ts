@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePackageDto } from './dto/create-package.dto';
-import { CancelPackageStockDto, CompletePackageStockDto, ConfirmPackageStockDto, UpdatePackageDto } from './dto/update-package.dto';
+import {
+  CancelPackageStockDto,
+  CompletePackageStockDto,
+  ConfirmPackageStockDto,
+  UpdatePackageDto,
+} from './dto/update-package.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Package } from './entities/package.entity';
 import { Repository } from 'typeorm';
+import { PackageGallery } from './entities/packager-gallery.entity';
+import { AddPackageGalleryDto } from './dto/add-gallery-to-even.dto';
 
 @Injectable()
 export class PackageService {
   constructor(
     @InjectRepository(Package)
     private readonly packageRepository: Repository<Package>,
+    @InjectRepository(PackageGallery)
+    private readonly galleryRepository: Repository<PackageGallery>,
   ) {}
 
   create(createPackageDto: CreatePackageDto) {
@@ -26,7 +35,7 @@ export class PackageService {
 
   findByEvent(eventId: number) {
     return this.packageRepository.find({
-      relations: { event: true },
+      relations: { event: true, galleries: true },
       where: [{ event: { id: eventId } }, { isActive: true }],
     });
   }
@@ -34,7 +43,7 @@ export class PackageService {
   findOne(id: number) {
     return this.packageRepository.findOne({
       relations: { event: true },
-      where: [ { id: id }],
+      where: [{ id: id }],
     });
   }
 
@@ -58,8 +67,29 @@ export class PackageService {
     return this.packageRepository.update(id, updatePackageDto);
   }
 
-
   remove(id: number) {
     return this.packageRepository.delete(id);
+  }
+
+  async removeGallery(bannerId: number) {
+    return this.packageRepository.delete(bannerId);
+  }
+  async addGallery(addGalleryToEventDto: AddPackageGalleryDto) {
+    const id = addGalleryToEventDto.eventId;
+    const pack = await this.packageRepository.findOneBy({ id });
+    const banner = new PackageGallery();
+    if (pack) {
+      banner.imgUrl = addGalleryToEventDto.bannerUrl;
+      banner.package = pack;
+    }
+    return this.packageRepository.save(banner);
+  }
+
+  async updateGallery(id: number, bannerUrl: string) {
+    const banner = await this.galleryRepository.findOneBy({ id });
+    if (banner) {
+      banner.imgUrl = bannerUrl;
+    }
+    return this.packageRepository.update(id, banner);
   }
 }

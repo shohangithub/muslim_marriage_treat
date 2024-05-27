@@ -1,14 +1,15 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Event } from "./event.entity";
+import { Package } from "./package.entity";
 
 @Entity()
 
-export class EventGallery{
+export class PackageGallery{
     @PrimaryGeneratedColumn()
     id:number;
 
     @Column()
     imgUrl: string
-    @ManyToOne(() => Event, event => event.galleries)
-    event: Event;
+
+    @ManyToOne(() => Package, event => event.galleries)
+    package: Package;
 }

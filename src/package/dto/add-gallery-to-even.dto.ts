@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class AddGalleryToEventDto{
+export class AddPackageGalleryDto{
     @IsNotEmpty()
     bannerUrl: string;
     @IsNotEmpty()

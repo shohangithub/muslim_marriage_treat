@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { PackageGallery } from './packager-gallery.entity';
 
 @Entity()
 export class Package {
@@ -67,4 +68,8 @@ export class Package {
 
   @OneToMany(() => Booking, (booking) => booking.package)
   bookings!: Booking[];
+  
+  @OneToMany(() => PackageGallery, (gallery) => gallery.package)
+  galleries: PackageGallery[];
+  
 }

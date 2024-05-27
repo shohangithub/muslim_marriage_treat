@@ -4,16 +4,12 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Equal, MoreThan, Repository } from 'typeorm';
-import {  AddGalleryToEventDto } from './dto/add-gallery-to-even.dto';
-import { EventGallery } from './entities/eventgallery.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
-    private readonly eventRepository: Repository<Event>,
-    @InjectRepository(EventGallery)
-    private readonly bannerRepository: Repository<EventGallery>,
+    private readonly eventRepository: Repository<Event>
   ) {}
 
   async create(createEventDto: CreateEventDto) {
@@ -24,8 +20,7 @@ export class EventService {
     return this.eventRepository.find({
       relations: {
         venues: true,
-        instructors: true,
-        galleries:true
+        instructors: true
       },
     });
   }
@@ -49,8 +44,7 @@ export class EventService {
     return this.eventRepository.findOne({
       relations: {
         venues: true,
-        instructors: true,
-        galleries:true
+        instructors: true
       },
       where: [
         {
@@ -83,25 +77,4 @@ export class EventService {
   remove(id: number) {
     return this.eventRepository.delete(id);
   }
-  async removeBanner(bannerId: number) {
-    return this.bannerRepository.delete(bannerId);
-  }
-  async addBannerToEvent(addGalleryToEventDto:AddGalleryToEventDto ) {
-    const id=addGalleryToEventDto.eventId;
-    const event = await this.eventRepository.findOneBy({id});
-    const banner = new EventGallery();
-    if (event) {
-      banner.imgUrl = addGalleryToEventDto.bannerUrl;
-      banner.event = event;
-    }
-    return this.bannerRepository.save(banner);
-  }
-  async updateBanner(id:number, bannerUrl: string){
-    const banner=await this.bannerRepository.findOneBy({id});
-    if(banner){
-      banner.imgUrl=bannerUrl;
-    }
-    return this.bannerRepository.update(id,banner);
-  }
-  
 }
