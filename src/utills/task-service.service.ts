@@ -8,9 +8,9 @@ export class TasksService {
   private readonly logger = new Logger(TasksService.name);
 
   @Cron(CronExpression.EVERY_30_SECONDS)
-  handleCron() {
+  async handleCron() {
     this.logger.debug('Operation start');
-    // this.bookingRepository.removeUnusedBooking();
+    await this.bookingRepository.removeUnusedBooking();
     this.logger.debug('Operation completed');
   }
 }

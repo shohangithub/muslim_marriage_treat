@@ -136,8 +136,8 @@ export class BookingService {
     return this.bookingRepository.update(id, updateBookingDto);
   }
 
-  removeUnusedBooking() {
-    this.bookingRepository
+  async removeUnusedBooking() {
+    const existingData = await this.bookingRepository
       .find({
         relations: {
           package: true,
@@ -148,22 +148,30 @@ export class BookingService {
             bookingStatus: Equal(BOOKING_STATUS.RESERVED),
           },
         ],
-      })
-      .then((res) => {
-        if (res.length > 0) {
-          for (const item of res) {
-            const pack = item.package;
-            if (pack) {
-              const stock: ManagePackageStockDto = {
-                totalQty: pack.totalQty + 1,
-                reservedQty: pack.reservedQty - 1,
-              };
-              this.packageRepository.update(pack.id, stock);
-            }
-          }
-          this.bookingRepository.delete(res.map((x) => x.id));
-        }
       });
+
+      console.log(new Date().getTime().toString())
+      console.log(existingData)
+    if (existingData.length > 0) {
+      const packageIds = [...new Set(existingData.map(x => x.package.id))];
+      for (const packageId of packageIds) {
+        console.log("Unique Ids")
+        console.log(packageId)
+        const totalBooked = existingData.filter(x => x.package.id == packageId).length;
+        console.log("BookedQuantity")
+        console.log(totalBooked)
+        const pack = existingData.find(x => x.package.id == packageId)?.package;
+        if (pack) {
+          const stock: ManagePackageStockDto = {
+            totalQty: pack.totalQty + totalBooked,
+            reservedQty: pack.reservedQty - totalBooked,
+          };
+          await this.packageRepository.update(pack.id, stock);
+        }
+      }
+
+      await this.bookingRepository.delete(existingData.map((x) => x.id));
+    }
   }
 
   async completeBooking(id: number, dto: CompleteBookingDto) {
