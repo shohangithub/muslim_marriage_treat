@@ -63,6 +63,12 @@ export class BookingController {
   confirmBooking(@Param('id') id: number) {
     return this.bookingService.confirmBooking(id);
   }
+
+  @Put('refund-booking/:id')
+  refundBooking(@Param('id') id: number) {
+    return this.bookingService.refundBooking(id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bookingService.remove(+id);

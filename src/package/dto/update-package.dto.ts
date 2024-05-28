@@ -46,6 +46,18 @@ export class CancelPackageStockDto {
     
     @IsNumber()
     @Min(0)
+    bookedQty: number;
+  
+  }
+
+  export class RefundPackageStockDto {
+    
+    @IsNumber()
+    @Min(0)
+    totalQty: number;
+    
+    @IsNumber()
+    @Min(0)
     confirmedQty: number;
   
   }
