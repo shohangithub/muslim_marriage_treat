@@ -87,7 +87,7 @@ export class BookingService {
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       //.innerJoinAndSelect("booking.package", "package")
       //.leftJoinAndSelect('booking.package', 'package');
-      .where(`booking.bookingStatus != :status`)
+      .where('booking.bookingStatus != :status',{ status: BOOKING_STATUS.RESERVED })
       .andWhere(
         'LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)',
         {
