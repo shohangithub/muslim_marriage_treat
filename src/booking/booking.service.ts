@@ -37,8 +37,6 @@ export class BookingService {
 
     if (res) {
       if (res.totalQty > 0) {
-        console.log(new Date().getTime().toString())
-        console.log("package: " + res)
         createBookingDto.transactionNumber = uuid();
         createBookingDto.bookedFrom = new Date().getTime().toString();
         createBookingDto.expireTime = new Date(new Date().setMinutes(new Date().getMinutes() + parseInt(this.bookingExpireTime))).getTime().toString();
@@ -48,12 +46,7 @@ export class BookingService {
           totalQty: res.totalQty - 1,
           reservedQty: res.reservedQty + 1,
         };
-        console.log("current-stock: ")
-        console.log(stock)
-        console.log("package id: ")
-        console.log(res.id)
         await this.packageRepository.update(res.id, stock)
-        console.log("response: " + result)
         return result;
       } else if (res.totalQty == 0 && res.reservedQty == 0) {
         throw new HttpException(
@@ -159,17 +152,16 @@ export class BookingService {
     if (existingData.length > 0) {
       const packageIds = [...new Set(existingData.map(x => x.package.id))];
       for (const packageId of packageIds) {
-        console.log("Unique Ids")
-        console.log(packageId)
         const totalBooked = existingData.filter(x => x.package.id == packageId).length;
-        console.log("BookedQuantity")
-        console.log(totalBooked)
         const pack = existingData.find(x => x.package.id == packageId)?.package;
         if (pack) {
           const stock: ManagePackageStockDto = {
             totalQty: pack.totalQty + totalBooked,
             reservedQty: pack.reservedQty - totalBooked,
           };
+          if (stock.reservedQty < 0)
+            stock.reservedQty = 0;
+
           await this.packageRepository.update(pack.id, stock);
         }
       }
@@ -203,13 +195,17 @@ export class BookingService {
     if (response) {
       const pack = response.package;
       if (pack.packagePrice < dto.bookingMoney)
-        throw new HttpException(`Booking money can't be greater than package price.`, HttpStatus.BAD_REQUEST);
+        throw new HttpException(`Booking money can't greater than package price.`, HttpStatus.BAD_REQUEST);
 
       if (pack) {
         const stock: CompletePackageStockDto = {
           bookedQty: pack.bookedQty + 1,
           reservedQty: pack.reservedQty - 1,
         };
+       
+        if (stock.reservedQty < 0)
+          stock.reservedQty = 0;
+
         await this.packageRepository.update(pack.id, stock);
       }
       this.mailService.sendEmailwithTemplate(
@@ -223,6 +219,7 @@ export class BookingService {
           roomName: pack.roomName,
         },
       );
+         
       return this.bookingRepository.update(id, {
         transactionMethod: dto.transactionMethod,
         confirmationCode: dto.confirmationCode,
@@ -263,6 +260,7 @@ export class BookingService {
         {
           name: response.firstName + ' ' + response.lastName,
           packageName: pack.packageName,
+          roomName: pack.roomName,
         },
       );
 
