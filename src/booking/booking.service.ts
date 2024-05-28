@@ -39,8 +39,8 @@ export class BookingService {
         console.log(new Date().getTime().toString())
         console.log("package: " + res)
         createBookingDto.transactionNumber = uuid();
-        createBookingDto.bookedFrom = new Date().getTime().toString(); 
-        createBookingDto.expireTime = new Date(new Date().setMinutes(new Date().getMinutes() + parseInt(this.bookingExpireTime))).getTime().toString(); 
+        createBookingDto.bookedFrom = new Date().getTime().toString();
+        createBookingDto.expireTime = new Date(new Date().setMinutes(new Date().getMinutes() + parseInt(this.bookingExpireTime))).getTime().toString();
 
         const result = await this.bookingRepository.save(createBookingDto);
         const stock: ManagePackageStockDto = {
@@ -153,8 +153,8 @@ export class BookingService {
         ],
       });
 
-      console.log(new Date().getTime().toString())
-      console.log(existingData)
+    console.log(new Date().getTime().toString())
+    console.log(existingData)
     if (existingData.length > 0) {
       const packageIds = [...new Set(existingData.map(x => x.package.id))];
       for (const packageId of packageIds) {
@@ -201,6 +201,9 @@ export class BookingService {
 
     if (response) {
       const pack = response.package;
+      if (pack.packagePrice < dto.bookingMoney)
+        throw new HttpException(`Booking money can't be greater than package price.`, HttpStatus.BAD_REQUEST);
+
       if (pack) {
         const stock: CompletePackageStockDto = {
           bookedQty: pack.bookedQty + 1,
