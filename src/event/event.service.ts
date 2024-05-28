@@ -4,6 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Equal, MoreThan, Repository } from 'typeorm';
+import { EVENT_STATUS } from 'src/utills/enum';
 
 @Injectable()
 export class EventService {
@@ -33,9 +34,14 @@ export class EventService {
       },
       where: [
         {
+         
           startDate: MoreThan(new Date()),
-          isActive: Equal(true),
+          isActive: Equal(true)
         },
+        {
+          eventStatus:EVENT_STATUS.CURRENT,
+          isActive: Equal(true)
+        }
       ],
     });
   }
