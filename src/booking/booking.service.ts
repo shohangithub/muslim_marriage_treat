@@ -12,6 +12,7 @@ import {
   CompletePackageStockDto,
   ConfirmPackageStockDto,
   ManagePackageStockDto,
+  RefundPackageStockDto,
 } from 'src/package/dto/update-package.dto';
 import { PaginationQuery } from 'src/utills/pagination';
 import { MailService } from 'src/mail/mail.service';
@@ -289,13 +290,43 @@ export class BookingService {
       if (pack) {
         const stock: CancelPackageStockDto = {
           totalQty: pack.totalQty + 1,
-          confirmedQty: pack.confirmedQty - 1,
+          bookedQty: pack.bookedQty - 1,
         };
         await this.packageRepository.update(pack.id, stock);
       }
 
       return this.bookingRepository.update(id, {
         bookingStatus: BOOKING_STATUS.CANCELLED,
+      });
+    }
+    throw new HttpException(`Booking data not found.`, HttpStatus.BAD_REQUEST);
+  }
+
+  async refundBooking(id: number) {
+    const response = await this.bookingRepository.findOne({
+      relations: {
+        package: true,
+      },
+      where: [
+        {
+          id: id,
+          bookingStatus: Equal(BOOKING_STATUS.CONFIRMED),
+        },
+      ],
+    });
+
+    if (response) {
+      const pack = response.package;
+      if (pack) {
+        const stock: RefundPackageStockDto = {
+          totalQty: pack.totalQty + 1,
+          confirmedQty: pack.confirmedQty - 1,
+        };
+        await this.packageRepository.update(pack.id, stock);
+      }
+
+      return this.bookingRepository.update(id, {
+        bookingStatus: BOOKING_STATUS.REFUNDED,
       });
     }
     throw new HttpException(`Booking data not found.`, HttpStatus.BAD_REQUEST);
