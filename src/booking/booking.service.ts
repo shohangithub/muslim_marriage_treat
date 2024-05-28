@@ -4,9 +4,8 @@ import { CompleteBookingDto, UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, LessThan, Repository } from 'typeorm';
-import { BOOKING_STATUS } from 'src/utills/enum';
+import { BOOKING_STATUS, PACKAGE_TYPE } from 'src/utills/enum';
 import { uuid } from 'uuidv4';
-import { PackageService } from 'src/package/package.service';
 import {
   CancelPackageStockDto,
   CompletePackageStockDto,
@@ -87,7 +86,7 @@ export class BookingService {
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       //.innerJoinAndSelect("booking.package", "package")
       //.leftJoinAndSelect('booking.package', 'package');
-      .where('booking.bookingStatus != :status',{ status: BOOKING_STATUS.RESERVED })
+      .where('booking.bookingStatus != :status', { status: BOOKING_STATUS.RESERVED })
       .andWhere(
         'LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name)',
         {
@@ -182,7 +181,7 @@ export class BookingService {
 
     const response = await this.bookingRepository.findOne({
       relations: {
-        package: true,
+        package: { event: { instructors: true } },
       },
       where: [
         {
@@ -202,24 +201,49 @@ export class BookingService {
           bookedQty: pack.bookedQty + 1,
           reservedQty: pack.reservedQty - 1,
         };
-       
+
         if (stock.reservedQty < 0)
           stock.reservedQty = 0;
 
         await this.packageRepository.update(pack.id, stock);
       }
+
       this.mailService.sendEmailwithTemplate(
         response.email,
         './booking',
         'Package Booking Information',
         {
-          name: response.firstName + ' ' + response.lastName,
-          bookingMoney: dto.bookingMoney,
-          packageName: pack.packageName,
-          roomName: pack.roomName,
-        },
+          logoUrl: "https://muslimcouplesretreat.com/assets/images/logo.png",
+          eventName: pack.event.eventName,
+          // eventDateRange: `${dateFormat(pack.event.startDate, "longDate")} - ${dateFormat(pack.event.endDate, "longDate")}`,
+          eventDateRange: `${pack.event.endDate} - ${pack.event.startDate}`,
+          slogan: pack.event.slogan,
+          bannerUrl: pack.event.bannerUrl,
+          bookingAmount: "$" + response.bookingMoney,
+          confirmationCode: response.confirmationCode,
+          instructors: pack.event.instructors,
+          receiver: {
+            name: response.firstName + " " + response.lastName,
+            email: response.email
+          },
+          package: {
+            roomName: pack.roomName??"",
+            packageName: pack.packageName,
+            isSinglePackage: pack.packageType == PACKAGE_TYPE.SINGLE ? true : false,
+            packagePerson: pack.packagePerson,
+            packagedays: this.dateDiffInDays(pack.event.endDate, pack.event.startDate),
+            packagePrice: "$" + pack.packagePrice,
+            roomFeatures: pack.roomFeatures,
+            houseFeatures: pack.houseFeatures,
+            houseFeatureNote: pack.houseFeatureNote,
+            packageDealNote: pack.packageDealNote,
+            highlightFeatures: JSON.parse(pack.highlightFeatures),
+            packageDeal: JSON.parse(pack.packageDeal).map(x => ({ ...x, hasChildren: x.child.length > 0 })),
+          }
+
+        }
       );
-         
+
       return this.bookingRepository.update(id, {
         transactionMethod: dto.transactionMethod,
         confirmationCode: dto.confirmationCode,
@@ -228,6 +252,17 @@ export class BookingService {
       });
     }
     throw new HttpException(`Booking data not found.`, HttpStatus.BAD_REQUEST);
+  }
+
+  dateDiffInDays(a, b) {
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    // Discard the time and time-zone information.
+    const date1 = new Date(a);
+    const date2 = new Date(b);
+    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
   }
 
   async confirmBooking(id: number) {

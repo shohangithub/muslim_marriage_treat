@@ -21,8 +21,6 @@ export class BookingController {
 
   @Post()
   create(@Ip() ip: string, @Body() createBookingDto: CreateBookingDto) {
-    console.log("requwst in: ")
-    console.log(createBookingDto)
     createBookingDto.bookedFrom = ip;
     return this.bookingService.create(createBookingDto);
   }
