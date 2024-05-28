@@ -9,7 +9,7 @@ export class EventSchedule {
   @ManyToOne(() => Event, (event) => event.schedules)
   event: Event;
 
-  @Column({type:'date'})
+  @Column({ type: 'date' })
   date: Date;
 
   @Column()
@@ -18,10 +18,10 @@ export class EventSchedule {
   @Column()
   timeRange: string
 
-  @Column()
+  @Column({ length: 500 })
   activity: string
 
-  @Column({nullable: true})
+  @Column({ nullable: true, length: 500 })
   description?: string;
 
   @Column({ default: true })
