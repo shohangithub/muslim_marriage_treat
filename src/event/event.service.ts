@@ -27,7 +27,9 @@ export class EventService {
 
   upcomingEvent() {
     return this.eventRepository.find({
-     
+      relations: {
+        venues: true
+      },
       order: {
         startDate: 'ASC',
       },
