@@ -3,8 +3,8 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { CompleteBookingDto, UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, LessThan, Repository } from 'typeorm';
-import { BOOKING_STATUS, PACKAGE_TYPE } from 'src/utills/enum';
+import { Equal, LessThan, Not, Repository } from 'typeorm';
+import { BOOKING_STATUS, EVENT_STATUS, PACKAGE_TYPE } from 'src/utills/enum';
 import { uuid } from 'uuidv4';
 import {
   CancelPackageStockDto,
@@ -39,7 +39,9 @@ export class BookingService {
       if (res.totalQty > 0) {
         createBookingDto.transactionNumber = uuid();
         createBookingDto.bookedTime = new Date().getTime().toString();
-        createBookingDto.expireTime = Utils.getExpireTime(this.bookingExpireTime);
+        createBookingDto.expireTime = Utils.getExpireTime(
+          this.bookingExpireTime,
+        );
         const result = await this.bookingRepository.save(createBookingDto);
         const stock: ManagePackageStockDto = {
           totalQty: res.totalQty - 1,
@@ -83,16 +85,20 @@ export class BookingService {
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       //.innerJoinAndSelect("booking.package", "package")
       //.leftJoinAndSelect('booking.package', 'package');
-      .where('booking.bookingStatus != :status', {
+
+      .where('booking.bookingStatus <> :status', {
         status: BOOKING_STATUS.RESERVED,
-      })
-      .andWhere(
-        'LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name) OR LOWER(booking.confirmationCode) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName, booking.lastName)) LIKE LOWER(:name)',
+      });
+
+    if (paginationQuery.openText) {
+      query.andWhere(
+        '(LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name) OR LOWER(booking.confirmationCode) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName, booking.lastName)) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName," ", booking.lastName)) LIKE LOWER(:name))',
         {
           name: `%${paginationQuery.openText}%`,
-          status: BOOKING_STATUS.RESERVED,
         },
       );
+    }
+
     //.andWhere("(booking.name = :photoName OR photo.name = :bearName)")
 
     const totalCount = await query.getCount();
