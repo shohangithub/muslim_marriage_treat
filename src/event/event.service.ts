@@ -3,14 +3,14 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
-import { Equal, MoreThan, Repository } from 'typeorm';
+import { Equal, IsNull, MoreThan, Not, Repository } from 'typeorm';
 import { EVENT_STATUS } from 'src/utills/enum';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
-    private readonly eventRepository: Repository<Event>
+    private readonly eventRepository: Repository<Event>,
   ) {}
 
   async create(createEventDto: CreateEventDto) {
@@ -21,7 +21,7 @@ export class EventService {
     return this.eventRepository.find({
       relations: {
         venues: true,
-        instructors: true
+        instructors: true,
       },
     });
   }
@@ -29,21 +29,18 @@ export class EventService {
   upcomingEvent() {
     return this.eventRepository.find({
       relations: {
-        venues: true
+        venues: true,
       },
       order: {
         startDate: 'ASC',
       },
       where: [
         {
-         
-          startDate: MoreThan(new Date()),
-          isActive: Equal(true)
+          isActive: Equal(true),
         },
         {
-          eventStatus:EVENT_STATUS.CURRENT,
-          isActive: Equal(true)
-        }
+          eventStatus: EVENT_STATUS.CURRENT || EVENT_STATUS.UPCOMING,
+        },
       ],
     });
   }
@@ -52,11 +49,11 @@ export class EventService {
     return this.eventRepository.findOne({
       relations: {
         venues: true,
-        instructors: true
+        instructors: true,
       },
       where: [
         {
-          id: id
+          id: id,
         },
       ],
     });
