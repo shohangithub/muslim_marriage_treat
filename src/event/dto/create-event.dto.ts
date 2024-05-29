@@ -8,17 +8,16 @@ import { Venue } from 'src/venue/entities/venue.entity';
 export class CreateEventDto {
   @IsNotEmpty()
   eventName: string;
-  @IsNotEmpty()
+  
   @Transform(({ value }) => value && new Date(value))
   @IsDate()
   @MinDate(new Date())
-  startDate: Date;
+  startDate?: Date;
 
-  @IsNotEmpty()
   @Transform(({ value }) => value && new Date(value))
   @IsDate()
   @MinDate(new Date())
-  endDate: Date;
+  endDate?: Date;
   description: string;
   @IsNotEmpty()
   slogan: string;

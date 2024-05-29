@@ -4,7 +4,14 @@ import { Instructor } from 'src/instructor/entities/instructor.entity';
 import { Package } from 'src/package/entities/package.entity';
 import { EVENT_STATUS } from 'src/utills/enum';
 import { Venue } from 'src/venue/entities/venue.entity';
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Event {
@@ -14,11 +21,11 @@ export class Event {
   @Column()
   eventName: string;
 
-  @Column({ type: 'date' })
-  startDate: Date;
+  @Column({ nullable: true, type: 'date' })
+  startDate!: Date;
 
-  @Column({ type: 'date' })
-  endDate: Date;
+  @Column({ nullable: true, type: 'date' })
+  endDate!: Date;
 
   @Column()
   description: string;
@@ -30,7 +37,7 @@ export class Event {
   bannerUrl: string;
 
   @Column()
-  packageDescription!: string
+  packageDescription!: string;
 
   @Column({ default: true })
   isActive: boolean;
@@ -46,14 +53,12 @@ export class Event {
 
   @ManyToMany(() => Instructor)
   @JoinTable()
-  instructors!: Instructor[]
+  instructors!: Instructor[];
 
   @ManyToMany(() => Venue)
   @JoinTable()
-  venues!: Venue[]
+  venues!: Venue[];
 }
-
-
 
 export class EventRefDto {
   @IsNotEmpty()
