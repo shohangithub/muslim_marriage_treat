@@ -27,6 +27,7 @@ export class CreateBookingDto {
     @IsPhoneNumber('US')
     phone: string;
     bookedFrom: string;
+    bookedTime!: string;
     expireTime!: string;
     // @IsEnum(BOOKING_STATUS)
     // bookingStatus: BOOKING_STATUS;
