@@ -5,4 +5,5 @@ export class CreateRoomTypeDto {
     typeName: string;
     description: string;
     isActive: boolean;
+    orderNumber!: number
 }

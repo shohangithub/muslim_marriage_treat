@@ -15,7 +15,7 @@ export class Package {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   roomName!: string;
 
   @Column()
@@ -66,10 +66,12 @@ export class Package {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ nullable: true })
+  orderNumber: number;
+
   @OneToMany(() => Booking, (booking) => booking.package)
   bookings!: Booking[];
-  
+
   @OneToMany(() => PackageGallery, (gallery) => gallery.package)
   galleries: PackageGallery[];
-  
 }

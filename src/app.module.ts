@@ -27,7 +27,7 @@ import { EventScheduleModule } from './event-schedule/event-schedule.module';
       password: 'dKMwAx6JEu',
       database: 'sql12707960',
       entities: [__dirname + '/../**/*.entity.js'],
-      synchronize: false,
+      synchronize: true,
     }),
     ScheduleModule.forRoot(),
     UserModule,

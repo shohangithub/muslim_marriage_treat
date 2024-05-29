@@ -6,4 +6,5 @@ export class CreateInstructorDto {
     degree!: string;
     imageUrl!: string;
     isActive: boolean;
+    orderNumber!: number
 }

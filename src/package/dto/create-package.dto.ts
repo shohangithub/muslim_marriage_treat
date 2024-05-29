@@ -48,5 +48,6 @@ export class CreatePackageDto {
 
   @IsNotEmpty()
   event: Event;
+  orderNumber!: number
   
 }

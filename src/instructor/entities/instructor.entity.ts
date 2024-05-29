@@ -19,6 +19,9 @@ export class Instructor {
     @Column({ default: true })
     isActive: boolean;
 
+    @Column({ nullable: true })
+    orderNumber: number
+
     @ManyToMany(() => Event, (event) => event.instructors)
     events!: Event[]
 }

@@ -24,6 +24,7 @@ export class CreateEventDto {
   packageDescription: string;
   bannerUrl: string;
   isActive: boolean;
+  orderNumber!: number
   packages: Package[];
   schedules: EventSchedule[];
   instructors: Instructor[];

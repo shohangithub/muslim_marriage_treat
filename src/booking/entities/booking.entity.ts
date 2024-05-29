@@ -46,6 +46,9 @@ export class Booking {
   @Column()
   bookedFrom: string;
 
+  @Column({ nullable: true })
+  orderNumber: number
+
   @Column({ default: BOOKING_STATUS.RESERVED })
   bookingStatus: BOOKING_STATUS;
 

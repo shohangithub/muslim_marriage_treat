@@ -37,6 +37,7 @@ export class PackageService {
     return this.packageRepository.find({
       relations: { event: true, galleries: true },
       where: [{ event: { id: eventId } }, { isActive: true }],
+      order: { orderNumber: 'ASC' },
     });
   }
 

@@ -26,4 +26,7 @@ export class EventSchedule {
 
   @Column({ default: true })
   isActive: boolean;
+  
+  @Column({ nullable: true })
+  orderNumber: number
 }

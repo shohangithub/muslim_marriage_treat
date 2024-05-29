@@ -48,6 +48,9 @@ export class Event {
   @Column({ default: EVENT_STATUS.UPCOMING })
   eventStatus: EVENT_STATUS;
 
+  @Column({ nullable: true })
+  orderNumber: number
+
   @OneToMany(() => EventSchedule, (schedule) => schedule.event)
   schedules!: EventSchedule[];
 

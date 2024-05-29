@@ -5,5 +5,6 @@ export class CreateVenueDto {
     venueName: string;
     venueAdress!: string;
     isActive: boolean;
+    orderNumber!: number
 }
  

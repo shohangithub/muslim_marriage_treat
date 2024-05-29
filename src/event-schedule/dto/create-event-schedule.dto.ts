@@ -21,4 +21,5 @@ export class CreateEventScheduleDto {
   activity: string;
   description!: string;
   isActive!: boolean;
+  orderNumber!: number
 }

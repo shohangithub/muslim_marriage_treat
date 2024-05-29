@@ -33,4 +33,5 @@ export class CreateBookingDto {
     // bookingStatus: BOOKING_STATUS;
     @IsNotEmpty()
     package: Package;
+    orderNumber!: number
 }

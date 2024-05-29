@@ -3,7 +3,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
-import { Equal, IsNull, MoreThan, Not, Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { EVENT_STATUS } from 'src/utills/enum';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class EventService {
         venues: true,
       },
       order: {
-        startDate: 'ASC',
+        orderNumber: 'ASC',
       },
       where: [
         {
