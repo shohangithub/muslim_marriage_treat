@@ -97,7 +97,7 @@ export class BookingService {
 
     if (paginationQuery.openText) {
       query.andWhere(
-        '(LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name) OR LOWER(booking.confirmationCode) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName, booking.lastName)) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName," ", booking.lastName)) LIKE LOWER(:name))',
+        '(LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name) OR LOWER(booking.confirmationCode) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName, booking.lastName)) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName," ", booking.lastName)) LIKE LOWER(:name) OR LOWER(package.packageName) LIKE LOWER(:name) OR booking.transactionNumber)',
         {
           name: `%${paginationQuery.openText}%`,
         },
