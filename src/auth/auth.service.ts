@@ -6,23 +6,30 @@ import { UserService } from 'src/user/user.service';
 export class AuthService {
   constructor(
     private usersService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async signIn(
     username: string,
     pass: string,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{
+    token: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  }> {
     const user = await this.usersService.findByEmail(username);
-    if(user==null)throw new UnauthorizedException("Invalid username");
+    if (user == null) throw new UnauthorizedException('Invalid username');
 
-    
     if (user?.password !== pass) {
-      throw new UnauthorizedException("Invalid password");
+      throw new UnauthorizedException('Invalid password');
     }
     const payload = { sub: user.id, username: user.email };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      token: await this.jwtService.signAsync(payload),
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     };
   }
 }
