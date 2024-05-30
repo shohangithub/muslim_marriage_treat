@@ -104,8 +104,19 @@ export class BookingService {
       )
       .skip(paginationQuery.pageIndex * paginationQuery.pageSize)
       .take(paginationQuery.pageSize)
-      //.setParameters({ photoName: "My", bearName: "Mishka" })
+      .select([
+        'booking.id',
+        'booking.transactionMethod',
+        'booking.transactionNumber',
+        'booking.confirmationCode',
+        'booking.firstName',
+        'booking.lastName',
+        'booking.bookingStatus',
+        'booking.bookingMoney',
+        'package.packageName',
+      ])
       .getMany();
+
     const response = {
       data: data,
       paging: {
