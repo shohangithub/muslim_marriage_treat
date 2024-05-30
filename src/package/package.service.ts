@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePackageDto } from './dto/create-package.dto';
 import {
   CancelPackageStockDto,
@@ -11,6 +11,7 @@ import { Package } from './entities/package.entity';
 import { Repository } from 'typeorm';
 import { PackageGallery } from './entities/packager-gallery.entity';
 import { AddPackageGalleryDto } from './dto/add-gallery-to-even.dto';
+import { PackageQueryDto } from './dto/package-query.dto';
 
 @Injectable()
 export class PackageService {
@@ -92,5 +93,80 @@ export class PackageService {
       banner.imgUrl = bannerUrl;
     }
     return this.packageRepository.update(id, banner);
+  }
+
+  async packageSummary(paginationQuery: PackageQueryDto) {
+   
+    if (!paginationQuery)
+      throw new HttpException(
+        `Invalid query parameters !`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (
+      paginationQuery &&
+      (paginationQuery.pageIndex < 0 || paginationQuery.pageSize == 0)
+    )
+      throw new HttpException(
+        `Invalid query parameters !`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const query = this.packageRepository
+      .createQueryBuilder('package')
+      .innerJoinAndSelect('package.event', 'event')
+      .where('package.isActive =:status', {
+        status: true,
+      });
+
+    if (paginationQuery.eventId) {
+      query.andWhere('event.id = :eventId', {
+        eventId: paginationQuery.eventId,
+      });
+    }
+
+    if (paginationQuery.openText) {
+      query.andWhere(
+        '(LOWER(package.packageName) LIKE LOWER(:name))',
+        {
+          name: `%${paginationQuery.openText}%`,
+        },
+      );
+    }
+
+    const totalCount = await query.getCount();
+    const data = await query
+      .orderBy(
+        'package.orderNumber',
+        paginationQuery.isAscending == 'true' ? 'ASC' : 'DESC',
+      )
+      .skip(paginationQuery.pageIndex * paginationQuery.pageSize)
+      .take(paginationQuery.pageSize)
+      .select([
+        'package.id',
+        'package.packageName',
+        'package.totalQty',
+        'package.reservedQty',
+        'package.bookedQty',
+        'package.confirmedQty',
+        'package.orderNumber',
+        'event.id',
+        'event.eventName',
+      ])
+      .getMany();
+
+
+    const response = {
+      data: data,
+      paging: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        pageSize: 20,
+        pageIndex: 0,
+        totalData: totalCount,
+        totalPages: 0,
+      },
+    };
+    return response;
   }
 }
