@@ -13,7 +13,7 @@ import {
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { CompleteBookingDto, UpdateBookingDto } from './dto/update-booking.dto';
-import { PaginationQuery } from 'src/utills/pagination';
+import { BookingQueryDto } from './dto/booking-query.dto';
 
 @Controller('booking')
 export class BookingController {
@@ -31,7 +31,7 @@ export class BookingController {
   }
 
   @Get('pagination')
-  pagination(@Query() paginationQuery: PaginationQuery) {
+  pagination(@Query() paginationQuery: BookingQueryDto) {
     return this.bookingService.pagination(paginationQuery);
   }
 

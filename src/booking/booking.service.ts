@@ -12,10 +12,10 @@ import {
   ManagePackageStockDto,
   RefundPackageStockDto,
 } from 'src/package/dto/update-package.dto';
-import { PaginationQuery } from 'src/utills/pagination';
 import { MailService } from 'src/mail/mail.service';
 import { Package } from 'src/package/entities/package.entity';
 import { Utils } from 'src/utills/extension';
+import { BookingQueryDto } from './dto/booking-query.dto';
 
 @Injectable()
 export class BookingService {
@@ -65,12 +65,14 @@ export class BookingService {
     throw new HttpException(`Package not found.`, HttpStatus.BAD_REQUEST);
   }
 
-  async pagination(paginationQuery: PaginationQuery) {
+  async pagination(paginationQuery: BookingQueryDto) {
+   
     if (!paginationQuery)
       throw new HttpException(
         `Invalid query parameters !`,
         HttpStatus.BAD_REQUEST,
       );
+
     if (
       paginationQuery &&
       (paginationQuery.pageIndex < 0 || paginationQuery.pageSize == 0)
@@ -83,9 +85,16 @@ export class BookingService {
     const query = this.bookingRepository
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
       .innerJoinAndSelect('booking.package', 'package')
+      .innerJoinAndSelect('package.event', 'event')
       .where('booking.bookingStatus <> :status', {
         status: BOOKING_STATUS.RESERVED,
       });
+
+    if (paginationQuery.eventId) {
+      query.andWhere('event.id = :eventId', {
+        eventId: paginationQuery.eventId,
+      });
+    }
 
     if (paginationQuery.openText) {
       query.andWhere(
@@ -114,6 +123,8 @@ export class BookingService {
         'booking.bookingStatus',
         'booking.bookingMoney',
         'package.packageName',
+        'event.id',
+        'event.eventName',
       ])
       .getMany();
 
