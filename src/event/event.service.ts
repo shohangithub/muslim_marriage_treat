@@ -34,10 +34,15 @@ export class EventService {
       order: {
         orderNumber: 'ASC',
       },
-      where: {
+      where: [{
         isActive: Equal(true),
-        eventStatus: EVENT_STATUS.CURRENT || EVENT_STATUS.UPCOMING,
+        eventStatus: EVENT_STATUS.CURRENT,
       },
+      {
+        isActive: Equal(true),
+        eventStatus: EVENT_STATUS.UPCOMING
+      }
+      ]
     });
   }
 
