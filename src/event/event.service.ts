@@ -34,14 +34,10 @@ export class EventService {
       order: {
         orderNumber: 'ASC',
       },
-      where: [
-        {
-          isActive: Equal(true),
-        },
-        {
-          eventStatus: EVENT_STATUS.CURRENT || EVENT_STATUS.UPCOMING,
-        },
-      ],
+      where: {
+        isActive: Equal(true),
+        eventStatus: EVENT_STATUS.CURRENT || EVENT_STATUS.UPCOMING,
+      },
     });
   }
 
@@ -51,11 +47,9 @@ export class EventService {
         venues: true,
         instructors: true,
       },
-      where: [
-        {
-          id: id,
-        },
-      ],
+      where: {
+        id: id,
+      },
     });
   }
 

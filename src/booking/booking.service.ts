@@ -31,7 +31,7 @@ export class BookingService {
   async create(createBookingDto: CreateBookingDto) {
     const res = await this.packageRepository.findOne({
       relations: { event: true },
-      where: [{ id: createBookingDto.package.id }],
+      where: { id: createBookingDto.package.id },
     });
 
     if (res) {
@@ -66,7 +66,6 @@ export class BookingService {
   }
 
   async pagination(paginationQuery: BookingQueryDto) {
-   
     if (!paginationQuery)
       throw new HttpException(
         `Invalid query parameters !`,
@@ -159,12 +158,10 @@ export class BookingService {
       relations: {
         package: true,
       },
-      where: [
-        {
-          expireTime: LessThan(new Date().getTime().toString()),
-          bookingStatus: Equal(BOOKING_STATUS.RESERVED),
-        },
-      ],
+      where: {
+        expireTime: LessThan(new Date().getTime().toString()),
+        bookingStatus: Equal(BOOKING_STATUS.RESERVED),
+      },
     });
 
     if (existingData.length > 0) {
@@ -205,12 +202,10 @@ export class BookingService {
       relations: {
         package: { event: { instructors: true } },
       },
-      where: [
-        {
-          id: id,
-          bookingStatus: Equal(BOOKING_STATUS.RESERVED),
-        },
-      ],
+      where: {
+        id: id,
+        bookingStatus: Equal(BOOKING_STATUS.RESERVED),
+      },
     });
 
     if (response) {
@@ -292,12 +287,10 @@ export class BookingService {
       relations: {
         package: true,
       },
-      where: [
-        {
-          id: id,
-          bookingStatus: Equal(BOOKING_STATUS.BOOKED),
-        },
-      ],
+      where: {
+        id: id,
+        bookingStatus: Equal(BOOKING_STATUS.BOOKED),
+      },
     });
 
     if (response) {
@@ -348,12 +341,10 @@ export class BookingService {
       relations: {
         package: true,
       },
-      where: [
-        {
-          id: id,
-          bookingStatus: Equal(BOOKING_STATUS.BOOKED),
-        },
-      ],
+      where: {
+        id: id,
+        bookingStatus: Equal(BOOKING_STATUS.BOOKED),
+      },
     });
 
     if (response) {
@@ -378,12 +369,10 @@ export class BookingService {
       relations: {
         package: true,
       },
-      where: [
-        {
-          id: id,
-          bookingStatus: Equal(BOOKING_STATUS.CONFIRMED),
-        },
-      ],
+      where: {
+        id: id,
+        bookingStatus: Equal(BOOKING_STATUS.CONFIRMED),
+      },
     });
 
     if (response) {

@@ -37,7 +37,7 @@ export class PackageService {
   findByEvent(eventId: number) {
     return this.packageRepository.find({
       relations: { event: true, galleries: true },
-      where: [{ event: { id: eventId } }, { isActive: true }],
+      where: { event: { id: eventId }, isActive: true },
       order: { orderNumber: 'ASC' },
     });
   }
@@ -45,7 +45,7 @@ export class PackageService {
   findOne(id: number) {
     return this.packageRepository.findOne({
       relations: { event: true },
-      where: [{ id: id }],
+      where: { id: id },
     });
   }
 
@@ -96,7 +96,6 @@ export class PackageService {
   }
 
   async packageSummary(paginationQuery: PackageQueryDto) {
-   
     if (!paginationQuery)
       throw new HttpException(
         `Invalid query parameters !`,
@@ -126,12 +125,9 @@ export class PackageService {
     }
 
     if (paginationQuery.openText) {
-      query.andWhere(
-        '(LOWER(package.packageName) LIKE LOWER(:name))',
-        {
-          name: `%${paginationQuery.openText}%`,
-        },
-      );
+      query.andWhere('(LOWER(package.packageName) LIKE LOWER(:name))', {
+        name: `%${paginationQuery.openText}%`,
+      });
     }
 
     const totalCount = await query.getCount();
@@ -154,7 +150,6 @@ export class PackageService {
         'event.eventName',
       ])
       .getMany();
-
 
     const response = {
       data: data,
