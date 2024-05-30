@@ -3,9 +3,8 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { CompleteBookingDto, UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, LessThan, Not, Repository } from 'typeorm';
-import { BOOKING_STATUS, EVENT_STATUS, PACKAGE_TYPE } from 'src/utills/enum';
-import { uuid } from 'uuidv4';
+import { Equal, LessThan, Repository } from 'typeorm';
+import { BOOKING_STATUS, PACKAGE_TYPE } from 'src/utills/enum';
 import {
   CancelPackageStockDto,
   CompletePackageStockDto,
@@ -37,7 +36,7 @@ export class BookingService {
 
     if (res) {
       if (res.totalQty > 0) {
-        createBookingDto.transactionNumber = uuid();
+        // createBookingDto.transactionNumber = uuid();
         createBookingDto.bookedTime = new Date().getTime().toString();
         createBookingDto.expireTime = Utils.getExpireTime(
           this.bookingExpireTime,
@@ -83,9 +82,7 @@ export class BookingService {
 
     const query = this.bookingRepository
       .createQueryBuilder('booking') // first argument is an alias. Alias is what you are selecting - photos. You must specify it.
-      //.innerJoinAndSelect("booking.package", "package")
-      //.leftJoinAndSelect('booking.package', 'package');
-
+      .innerJoinAndSelect('booking.package', 'package')
       .where('booking.bookingStatus <> :status', {
         status: BOOKING_STATUS.RESERVED,
       });
@@ -98,8 +95,6 @@ export class BookingService {
         },
       );
     }
-
-    //.andWhere("(booking.name = :photoName OR photo.name = :bearName)")
 
     const totalCount = await query.getCount();
     const data = await query
@@ -292,6 +287,8 @@ export class BookingService {
         };
         await this.packageRepository.update(pack.id, stock);
       }
+      // generate code
+      const verifyCode = await this.generateVerifyCode();
 
       this.mailService.sendEmailwithTemplate(
         response.email,
@@ -301,13 +298,27 @@ export class BookingService {
           name: response.firstName + ' ' + response.lastName,
           packageName: pack.packageName,
           roomName: pack.roomName,
+          verifyCode: verifyCode,
         },
       );
 
       return this.bookingRepository.update(id, {
+        transactionNumber: verifyCode,
         bookingStatus: BOOKING_STATUS.CONFIRMED,
       });
     }
+  }
+
+  private async generateVerifyCode(): Promise<string> {
+    let verifyCode = '';
+    do {
+      verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    } while (
+      await this.bookingRepository.exists({
+        where: { transactionNumber: verifyCode },
+      })
+    );
+    return verifyCode;
   }
 
   async cancelBooking(id: number) {
