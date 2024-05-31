@@ -231,49 +231,58 @@ export class BookingService {
         await this.packageRepository.update(pack.id, stock);
       }
 
+      const templateData = {
+        logoUrl: 'https://muslimcouplesretreat.com/assets/images/logo.png',
+        eventName: pack.event.eventName,
+        // eventDateRange: `${dateFormat(pack.event.startDate, "longDate")} - ${dateFormat(pack.event.endDate, "longDate")}`,
+        eventDateRange: Utils.formattedDateRange(
+          pack.event.startDate.toString(),
+          pack.event.endDate.toString(),
+        ),
+        slogan: pack.event.slogan,
+        bannerUrl: pack.event.bannerUrl,
+        bookingAmount: '$' + dto.bookingMoney,
+        confirmationCode: dto.confirmationCode,
+        instructors: pack.event.instructors,
+        receiver: {
+          name: response.firstName + ' ' + response.lastName,
+          email: response.email,
+        },
+        package: {
+          roomName: pack.roomName ?? '',
+          packageName: pack.packageName,
+          isSinglePackage:
+            pack.packageType == PACKAGE_TYPE.SINGLE ? true : false,
+          packagePerson: pack.packagePerson,
+          packagedays: Utils.dateDiffInDays(
+            pack.event.startDate,
+            pack.event.endDate,
+          ),
+          packagePrice: '$' + pack.packagePrice,
+          roomFeatures: pack.roomFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/img, "")|| "",
+          houseFeatures: pack?.houseFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/img, "")|| "",
+          houseFeatureNote: pack.houseFeatureNote,
+          packageDealNote: pack.packageDealNote,
+          highlightFeatures: JSON.parse(pack.highlightFeatures),
+          packageDeal: JSON.parse(pack.packageDeal).map((x) => ({
+            ...x,
+            hasChildren: x.child.length > 0,
+          })),
+        },
+      };
+
       this.mailService.sendEmailwithTemplate(
         response.email,
         './booking',
         'Package Booking Information',
-        {
-          logoUrl: 'https://muslimcouplesretreat.com/assets/images/logo.png',
-          eventName: pack.event.eventName,
-          // eventDateRange: `${dateFormat(pack.event.startDate, "longDate")} - ${dateFormat(pack.event.endDate, "longDate")}`,
-          eventDateRange: Utils.formattedDateRange(
-            pack.event.startDate.toString(),
-            pack.event.endDate.toString(),
-          ),
-          slogan: pack.event.slogan,
-          bannerUrl: pack.event.bannerUrl,
-          bookingAmount: '$' + dto.bookingMoney,
-          confirmationCode: dto.confirmationCode,
-          instructors: pack.event.instructors,
-          receiver: {
-            name: response.firstName + ' ' + response.lastName,
-            email: response.email,
-          },
-          package: {
-            roomName: pack.roomName ?? '',
-            packageName: pack.packageName,
-            isSinglePackage:
-              pack.packageType == PACKAGE_TYPE.SINGLE ? true : false,
-            packagePerson: pack.packagePerson,
-            packagedays: Utils.dateDiffInDays(
-              pack.event.endDate,
-              pack.event.startDate,
-            ),
-            packagePrice: '$' + pack.packagePrice,
-            roomFeatures: pack.roomFeatures,
-            houseFeatures: pack.houseFeatures,
-            houseFeatureNote: pack.houseFeatureNote,
-            packageDealNote: pack.packageDealNote,
-            highlightFeatures: JSON.parse(pack.highlightFeatures),
-            packageDeal: JSON.parse(pack.packageDeal).map((x) => ({
-              ...x,
-              hasChildren: x.child.length > 0,
-            })),
-          },
-        },
+        templateData,
+      );
+
+      this.mailService.sendEmailwithTemplate(
+        'info@aayattours.com',
+        './admin-booking',
+        'Package Booking Information',
+        templateData,
       );
 
       return this.bookingRepository.update(id, {
@@ -333,8 +342,8 @@ export class BookingService {
               pack.packageType == PACKAGE_TYPE.SINGLE ? true : false,
             packagePerson: pack.packagePerson,
             packagedays: Utils.dateDiffInDays(
-              pack.event.endDate,
               pack.event.startDate,
+              pack.event.endDate,
             ),
             packagePrice: '$' + pack.packagePrice,
             roomFeatures: pack.roomFeatures,

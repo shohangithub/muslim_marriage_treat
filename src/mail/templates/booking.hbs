@@ -1,380 +1,756 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Place Order</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    >
+    <title>Place Order</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    >
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-    rel="stylesheet" />
-  <style>
-    p {
-      font-weight: 400;
-    }
-  </style>
-</head>
+  </head>
 
-<body style="
+  <body style="-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;
       background-color: white;
-      font-family: 'Roboto', sans-serif;
-      /* font-family: 'Arial'; */
+      font-family: 'Arial', sans-serif;
       color: #3e434f;
       font-weight: 400;
-    ">
-  <table style="width: 600px; margin: 0 auto; background-color: #f6f6f4">
-    <thead>
-      <tr style="background: rgba(39, 39, 39, 0.35); backdrop-filter: blur(4px)">
-        <td style="text-align: center; padding: 20px">
-          <a href="#">
-            <img src="{{logoUrl}}" alt="Muslim Couple Retreat Logo" />
-          </a>
-        </td>
-      </tr>
-      <tr style="
-            background-image: url({{bannerUrl}});
-            background-size: cover;
-            background-repeat: no-repeat;
-            display: block;
-            width: 100%;
-            margin-top: -94px;
-          ">
-        <td style="padding: 100px 50px 50px; text-align: center; display: block">
-          <h1 style="
-                font-size: 40px;
-                font-size: 40px;
-                font-style: normal;
-                font-weight: 700;
-                color: #ed9d58;
+      margin: 0;
+      padding: 0;
+    ;">
+    <!--=====|| Email Header Section Start ||=====-->
+    <table style="border:0px solid transparent;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #f6f6f4;
+      border-collapse: collapse;
+    ;">
+      <tbody>
+        <tr>
+          <td>
+            <table
+              style="border:0px solid transparent;
+                width: 100%;
                 text-align: center;
-              ">
-            {{eventName}}
-          </h1>
-          {{#if instructors.length}}
-          <p style="
-                color: white;
-                font-size: 30px;
-                font-style: normal;
-                font-weight: 400;
-                margin-top: 20px;
-              ">
-            with
-          </p>
-          {{#each instructors}}
-          <p style="
-                color: white;
-                font-size: 45px;
-                font-weight: 500;
-                font-style: italic;
-              ">
-            {{this.name}}
-          </p>
-
-          {{/each}}
-
-
+                background-image: url({{bannerUrl}});
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                border-collapse: collapse;
+              ;"
+              align="center"
+            >
+              <tbody>
+                <tr style="
+                background: rgba(39, 39, 39, 0.35);
+                backdrop-filter: blur(4px);
+                ">
+                  <td style="
+                    text-align: center;
+                    padding: 20px;
+                  ">
+                    <a
+                      href="https://muslimcouplesretreat.com/"
+                      style="color:white;text-decoration:none;font-size:14px;"
+                    >
+                      <img
+                        src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/a42f4be6-af13-4528-b720-4086f8a5b53d"
+                        alt="Muslim Couple Retreat Logo"
+                        style="-ms-interpolation-mode:bicubic;"
+                      >
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="
+                      padding: 36px 50px 0px;
+                      text-align: center;
+                      display: block;
+                    ">
+                    <h1 style='margin:0;padding:0;font-family:"Arial", sans-serif;
+                        font-size: 40px;
+                        font-size: 40px;
+                        font-style: normal;
+                        font-weight: 700;
+                        color: #ed9d58;
+                        text-align: center;
+                      ;'>
+                       {{eventName}}
+                    </h1>
+                    {{#if instructors.length}}
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
+                      color: white;
+                      font-size: 30px;
+                      font-style: normal;
+                      font-weight: 400;
+                      margin-top: 20px;
+                    ;'>
+                      with
+                    </p>
+                    {{#each instructors}}
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
+                      color: white;
+                      font-size: 45px;
+                      font-weight: 500;
+                      font-style: italic;
+                    ;'>
+                       {{this.name}}
+                    </p>
+                    {{/each}}
           {{/if}}
-
-
-          <p style="
-                color: white;
-                font-size: 20px;
-                font-style: normal;
-                font-weight: 400;
-                border-bottom: 2px solid #ed9d58;
-                padding-bottom: 15px;
-              ">
-            {{slogan}}
-          </p>
-          <p style="
-                color: white;
-                font-size: 24px;
-                font-style: normal;
-                font-weight: 400;
-                margin-top: 20px;
-              ">
-            <i class="icon-calender" style="color: #ed9d58"></i>
-            {{eventDateRange}}
-          </p>
-        </td>
-      </tr>
-    </thead>
-    <tbody style="
-          padding: 40px 60px;
-          display: block;
-          text-align: center;
-          width: 100%;
-        ">
-      <tr style="
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
+                        color: white;
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 400;
+                        border-bottom: 2px solid #ed9d58;
+                        padding-bottom: 15px;
+                        margin-top: 5px;
+                        display: inline-block;
+                      ;'>
+                          {{slogan}}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom: 50px; text-align: center">
+                    <table
+                      style="border-collapse:collapse;border:0px solid transparent;
+                        color: white;
+                        font-size: 24px;
+                        font-style: normal;
+                        font-weight: 400;
+                        margin-top: 20px;
+                      ;"
+                      align="center"
+                    >
+                      <tbody>
+                        <tr>
+                          <td style="padding-top: 4px">
+                            <img
+                              style="-ms-interpolation-mode:bicubic;margin-right: 15px;"
+                              src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/ee62bc01-b838-4dd9-bc5b-ed2f48f4dace"
+                              alt="bed"
+                            >
+                          </td>
+                          <td>  {{eventDateRange}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!--=====|| Email Header Section End ||=====-->
+    <!--=====|| Email Body Section Start ||=====-->
+    <table style="border:0px solid transparent;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #f6f6f4;
+        border-collapse: collapse;
+      ;">
+      <tbody style="display: block; text-align: center; padding: 50px 50px 20px 50px">
+        <tr style="
             width: 100%;
             display: block;
             border-bottom: 2px solid #eaeaea;
             padding-bottom: 20px;
           ">
-        <td style="width: 100%; display: block">
-          <h2 style="font-size: 30px; font-weight: 700">
-            Hello <span style="color: #ed9d58">{{receiver.name}}!</span>
-          </h2>
-        </td>
-        <td style="width: 100%; display: block">
-          <p style="
+          <td style="display: block">
+            <h2 style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 30px; font-weight: 700;'>
+              Hello <span style="color: #ed9d58">{{receiver.name}}!</span>
+            </h2>
+          </td>
+          <td style="display: block">
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
                 font-size: 20px;
-                font-weight: 400; 
-                margin-top: 2 0px;
+                font-weight: 400;
+                margin-top: 30px;
                 padding-bottom: 20px;
-              ">
-            Your order has been placed to
-            <span style="font-weight: 700; font-style: italic; color: #ed9d58">{{eventName}}.</span>
-            Admin will get to back soon for confirmation.
-          </p>
-        </td>
-        <td style="width: 100%; display: block">
-          <p style="font-size: 20px; font-style: normal; font-weight: 700">
-            Amount given
-          </p>
-          <p style="
+              ;'>
+              Your order has been placed to
+              <span style="font-weight: 700; font-style: italic; color: #ed9d58">{{eventName}}</span>
+              Admin will get to back soon for confirmation.
+            </p>
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700;'>Amount Paid</p>
+            <p style="margin:0;font-weight:400;
                 color: #3e434f;
                 text-align: center;
                 font-family: Arial;
                 font-size: 45px;
-              ">
-            {{bookingAmount}}
-          </p>
-          <p style="font-size: 20px">
-            Email address: {{receiver.email}}
-          </p>
-          <p style="font-size: 20px">
-            Confirmation code: <span style="font-weight: 700">{{confirmationCode}}</span>
-          </p>
-        </td>
-      </tr>
-
-      <tr style="
+                padding: 10px 0 20px;
+              ;">
+              {{bookingAmount}}
+            </p>
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 20px; margin-bottom: 10px;'>
+              Email address: {{receiver.email}}
+            </p>
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 20px;'>
+              Confirmation code: <span style="font-weight: 700">{{confirmationCode}}</span>
+            </p>
+          </td>
+        </tr>
+        <tr style="
             display: block;
             width: 100%;
+            padding: 30px 0 20px;
             border-bottom: 2px solid #eaeaea;
-            padding: 20px 0;
           ">
-        <td style="display: block; width: 100%">
-          <p>
-            <span style="
+          <td style="display: block">
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;'>
+              <span style="
                   background-color: #ffffff;
                   padding: 5px 10px;
                   border-radius: 5px;
-                ">
-              {{#if package.isSinglePackage}}
+                "> {{#if package.isSinglePackage}}
               NO HOTEL
               {{/if}}
 
               {{#unless package.isSinglePackage}}
               Weekend Package
-              {{/unless}}
-            </span>
-          </p>
-          {{#unless package.isSinglePackage}}
-          <p style="color: #ed9d58; margin-top: 20px">{{package.roomName}}</p>
-          {{/unless}}
-
-          <h2 style="font-size: 30px; font-weight: 700">
-            {{package.packageName}}
-          </h2>
-
-          <ul style="
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                margin-top: 20px;
-              ">
-
-            {{#each package.highlightFeatures}}
-            <li>
-              <p style="font-size: 20px">
-                <span class="{{this.icon}}" style="color: #ed9d58"></span>
-                {{this.label}}
-              </p>
-            </li>
-            {{/each}}
-          </ul>
-        </td>
-      </tr>
-
-      <tr style="width: 100%; display: block">
-        <td style="width: 100%; display: block; text-align: center">
-          <p style="font-size: 20px; font-weight: 700; margin: 30px 0 20px">
-            {{eventDateRange}}
-            <span style="font-size: 18px; font-weight: 400">({{package.packagedays}}-day package)</span>
-          </p>
-          <button style="
-                border: 0;
-                background-color: #ff405f;
-                color: white;
-                font-size: 14px;
-                padding: 7px 12px;
-                border-radius: 5px;
-              ">
-            Per Couple
-          </button>
-          <p style="
+              {{/unless}}</span></span>
+            </p>
+             {{#unless package.isSinglePackage}}
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;color: #ed9d58; margin-top: 20px;'>{{package.roomName}}</p>
+            {{/unless}}
+            
+            <h2 style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 30px; font-weight: 700;'>
+              {{package.packageName}}
+            </h2>
+            <center>
+              <table style="border-collapse:collapse;border:0px solid transparent;margin-top: 20px;">
+                <tbody>
+                  <tr>
+                    {{#each package.highlightFeatures}}
+                    <td style="padding-right: 20px">
+                      <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;
+                          font-size: 20px;
+                          display: flex;
+                          align-items: center;
+                        ;'>
+                        <img
+                          style="-ms-interpolation-mode:bicubic;margin-right: 10px;"
+                          src="https://muslimcouplesretreat.com/assets/images/email-template/{{this.icon}}.png"
+                          alt="bed"
+                        >
+                        {{this.label}}
+                      </p>
+                    </td>
+                     {{/each}}
+                  </tr>
+                </tbody>
+              </table>
+            </center>
+          </td>
+        </tr>
+        <tr style="display: block; width: 100%; padding: 30px 0">
+          <td style="display: block">
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700;'>
+                {{eventDateRange}}
+              <span style="font-size: 18px; font-weight: 400">({{package.packagedays}}-day package)</span>
+            </p>
+            <div style="margin-top: 20px">
+              <button style="
+                  border: 0;
+                  background-color: #ff405f;
+                  color: white;
+                  font-size: 14px;
+                  padding: 7px 12px;
+                  border-radius: 5px;
+                ">
+                Per Couple
+              </button>
+            </div>
+            <p style="margin:0;font-weight:400;
                 color: #3e434f;
                 text-align: center;
                 font-family: Arial;
                 font-size: 45px;
-                margin: 10px 0;
-              ">
-            {{package.packagePrice}}
-          </p>
-          <p style="font-size: 20px; font-weight: 700; margin-bottom: 10px">
-            Room features:
-          </p>
-          <p style="font-size: 18px">
-            {{package.roomFeatures}}
-          </p>
-        </td>
-      </tr>
-
-      <tr style="width: 100%; display: block; margin: 20px;">
-        <td style="width: 100%; display: block; text-align: left;">
-          <p style="font-size: 20px; font-weight: 700; margin-bottom: 10px">
-            Package includes:
-          </p>
-          <ul style="margin-left: 17px;font-style: italic; display: flex; flex-direction: column; gap: 10px; ">
+                padding: 10px 0 20px;
+              ;">
+               {{package.packagePrice}}
+            </p>
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; margin-top: 10px;'>
+              Room Features:
+            </p>
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 18px; margin-top: 15px;'>
+             {{package.roomFeatures}}
+            </p>
+            <table
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+              role="presentation"
+              style="border-collapse:collapse;border:0px solid transparent;vertical-align: top;"
+              width="100%"
+            >
+              <tbody>
+                <tr>
+                  <td
+                    align="left"
+                    style="padding-top: 30px;"
+                  >
+                    <span style="font-size: 20px; font-weight: 700; margin-top: 10px">Package includes:</span>
+                  </td>
+                </tr>
             {{#each package.packageDeal}}
-            {{#if this.hasChildren}}
-            <p style="font-weight: 700; font-style: italic;">{{this.item}}</p>
-            {{#each this.child}}
-            <p>- {{this}}</p>
-            {{/each}}
-            {{else}}
-            <li style="list-style: disc;">
-              <p>{{this.item}}</p>
-            </li>
+{{#if this.hasChildren}}
+               
 
-            {{/if}}
-            {{/each}}
-          </ul>
-          <p style="color: #FF405F; font-style: italic; margin-top: 10px;">*{{package.packageDealNote}}</p>
-          <p style="color: #ed9d58; font-style: italic;  text-align: center; margin-top: 20px;">*{{package.houseFeatureNote}}</p>
-        </td>
-      </tr>
-
-      <tr style="width: 100%; display: block; margin: 30px 0 20px;">
-        <td style="width: 100%; display: block; text-align: left;">
-          <p style="font-size: 20px; font-weight: 700; margin-bottom: 10px">
-            House features:
-          </p>
-          <p style="font-size: 18px;">{{package.houseFeatures}}</p>
-         
-          <div style="text-align: center; margin-top: 40px;">
-            <a href="https://muslimcouplesretreat.com" style="
-                                border: 0;
-                                background-color: #ed9d58;
-                                color: white;
-                                font-size: 14px;
-                                padding: 16px 32px;
-                                border-radius: 5px;
+                   <tr>
+                  <td
+                    align="left"
+                    style="font-size: 0px; padding: 0; word-break: break-word; padding-top: 10px;"
+                  >
+                    <table
+                      align="left"
+                      border="0"
+                      cellpadding="0"
+                      cellspacing="0"
+                      role="presentation"
+                      style="border-collapse:collapse;border:0px solid transparent;float: none; display: inline-table;"
+                    >
+                      <tbody>
+                        <tr>
+                          <td style="padding: 4px; vertical-align: middle">
+                            <table
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              role="presentation"
+                              style="border-collapse:collapse;border:0px solid transparent;border-radius: 3px; width: 10px;"
+                            >
+                              <tbody>
+                                <tr>
+                                  <td style="
+                                      font-size: 0;
+                                      height: 10px;
+                                      vertical-align: middle;
+                                      width: 10px;
+                                    ">
+                                    <img
+                                      height="10"
+                                      src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/6fbbf0ba-f156-4d98-9df6-3aeb54c8e54f"
+                                      style="-ms-interpolation-mode:bicubic;border-radius: 3px; display: block;"
+                                      width="10"
+                                    >
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                          <td style="vertical-align: middle">
+                            <span style="
+                                font-size: 16px;
+                                font-style: italic;
+                                font-weight: 700;
+                                margin-left: 5px;
                               ">
-              See Package From Website
-            </a>
-          </div>
+                              {{this.item}}
+                            </span>
+                          </td>
+                        </tr>
+                         {{#each this.child}}
+                        <tr>
+                          <td style="padding: 4px; vertical-align: middle; padding-top: 15px;">
+                            <table
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              role="presentation"
+                              style="border-collapse:collapse;border:0px solid transparent;border-radius: 3px; width: 10px;"
+                            >
+                              <tbody>
+                                <tr>
+                                  <td style="
+                                      font-size: 0;
+                                      height: 10px;
+                                      vertical-align: middle;
+                                      width: 10px;
+                                    ">
+                                    <span
+                                      height="10"
+                                      width="10"
+                                    ></span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                          <td style="vertical-align: middle">
+                            <span style="
+                                font-size: 16px;
+                                font-style: italic;
+                                margin-left: 5px;
+                              ">
+                              - {{this}}
+                            </span>
+                          </td>
+                        </tr>
+                         {{/each}}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
 
-        </td>
-      </tr>
-    </tbody>
-    <tfoot style="
-          background-color: #3e434f;
-          padding: 40px 50px;
-          display: block;
-          width: 100%;
-        ">
-      <tr style="display: grid; grid-template-columns: 1fr 1fr">
-        <td style="display: block">
-          <h3 style="font-size: 20px; font-weight: 700; color: white">
-            Contacts:
-          </h3>
-          <p style="color: white; margin: 20px 0 12px">Monday - Friday</p>
-          <ul>
-            <li>
-              <p style="color: white">
-                <i class="icon-clock" style="margin-right: 10px"></i> 9 A.M. -
-                5 P.M.
-              </p>
-            </li>
-            <li>
-              <p style="color: white">
-                <i class="icon-whatsapp" style="margin-right: 10px"></i>
-                214-555-5555
-              </p>
-            </li>
-            <li>
-              <p style="color: white">
-                <i class="icon-mail" style="margin-right: 10px"></i>
-                info&#64;muslimcouplesretreats.com
-              </p>
-            </li>
-          </ul>
-        </td>
-
-        <td style="display: block; text-align: end">
-          <p style="color: white"><i class="icon-phone"></i> 214-555-5555</p>
-          <p style="color: white; font-size: 14px">(Mon-Fri - 5PM -9PM)</p>
-          <p style="color: white; font-size: 14px">(Sat-Sun -10AM -5PM)</p>
-          <h3 style="
-                font-size: 20px;
-                font-weight: 700;
-                color: white;
-                margin: 20px 0 12px;
-              ">
-            Get Social:
-          </h3>
-          <ul style="display: flex; justify-content: end; gap: 5px">
-            <li>
-              <i class="icon-facebook" style="margin-right: 10px; color: white; font-size: 20px"></i>
-            </li>
-            <li>
-              <i class="icon-instagram" style="margin-right: 10px; color: white; font-size: 20px"></i>
-            </li>
-            <li>
-              <i class="icon-linkedin" style="margin-right: 10px; color: white; font-size: 20px"></i>
-            </li>
-            <li>
-              <i class="icon-youtube" style="margin-right: 10px; color: white; font-size: 20px"></i>
-            </li>
-          </ul>
-        </td>
-      </tr>
-
-      <tr style="display: block; width: 100%; margin-top: 40px">
-        <div style="text-align: center; margin-top: 20px; font-size: 20px">
-          <div style="background-color: white; width: 100%; height: 1px"></div>
-          <h2 style="
+ {{else}}
+                <!--List Item End-->
+              <tr>
+                  <td
+                    align="left"
+                    style="font-size: 0px; padding: 0; word-break: break-word; padding-top: 10px;"
+                  >
+                    <table
+                      align="left"
+                      border="0"
+                      cellpadding="0"
+                      cellspacing="0"
+                      role="presentation"
+                      style="border-collapse:collapse;border:0px solid transparent;float: none; display: inline-table;"
+                    >
+                      <tbody>
+                        <tr>
+                          <td style="padding: 4px; vertical-align: middle">
+                            <table
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              role="presentation"
+                              style="border-collapse:collapse;border:0px solid transparent;border-radius: 3px; width: 10px;"
+                            >
+                              <tbody>
+                                <tr>
+                                  <td style="
+                                      font-size: 0;
+                                      height: 10px;
+                                      vertical-align: middle;
+                                      width: 10px;
+                                    ">
+                                    <img
+                                      height="10"
+                                      src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/6fbbf0ba-f156-4d98-9df6-3aeb54c8e54f"
+                                      style="-ms-interpolation-mode:bicubic;border-radius: 3px; display: block;"
+                                      width="10"
+                                    >
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                          <td style="vertical-align: middle">
+                            <span style="
+                                font-size: 16px;
+                                font-style: italic;
+                                margin-left: 5px;
+                              ">
+                            {{this.item}}
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                 {{/if}}
+                 {{/each}}
+                <!--List Item End-->
+                <tr>
+                  <td
+                    align="left"
+                    style="padding-top: 5px;"
+                  >
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 16px; font-style: italic; color: red;' in>
+                      *{{package.packageDealNote}}</p>
+                    <p
+                      style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 16px; font-style: italic; color: #ed9d58; text-align: center; margin-top: 30px;'>
+                      * {{package.houseFeatureNote}}</p>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; margin-top: 30px;'>
+                      House features:
+                    </p>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 18px; margin-top: 15px;'>
+                      {{package.houseFeatures}}
+                    </p>
+                    
+                    <div style="margin-top: 50px; text-align: center;">
+                      <button style="
+                                      border: 0;
+                                      background-color: #ed9d58;
+                                      color: white;
+                                      font-size: 18px;
+                                      padding: 16px 32px;
+                                      border-radius: 5px;
+                                    ">
+                        See Package From Website
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!--=====|| Email Body Section End ||=====-->
+    <!--=====|| Email Footer Section Start ||=====-->
+    <table style="border:0px solid transparent;
+        width: 100%;
+        max-width: 600px;
+        border-collapse: collapse;
+        margin: 0 auto;
+      ;">
+      <tbody style="background-color: #3e434f; padding: 50px">
+        <tr>
+          <td style="padding: 50px 0 50px 50px">
+            <table style="border-collapse:collapse;border:0px solid transparent;">
+              <tbody>
+                <tr>
+                  <td>
+                    <h3 style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; color: white;'>
+                      Contacts:
+                    </h3>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style='padding:0;font-family:"Arial", sans-serif;font-weight:400;color: white; margin: 20px 0 12px;'>
+                      Monday - Friday
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        font-size: 14px;
+                        margin-bottom: 10px;
+                      ;'>
+                      <img
+                        style="-ms-interpolation-mode:bicubic;margin-right: 10px; width: 20px;"
+                        src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/bc195581-6010-448b-a115-c20033054a91"
+                        alt="bed"
+                      >
+                      9 A.M. - 5 P.M.
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        font-size: 14px;
+                        margin-bottom: 10px;
+                      ;'>
+                      <img
+                        style="-ms-interpolation-mode:bicubic;margin-right: 10px; width: 20px;"
+                        src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/4844978b-346f-448c-ac78-014fc2afaadb"
+                        alt="whatsapp"
+                      >
+                      214-555-5555
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        font-size: 14px;
+                      ;'>
+                      <img
+                        style="-ms-interpolation-mode:bicubic;margin-right: 10px; width: 20px;"
+                        src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/7ba3e040-e0e1-40f9-a438-b7e6562ef6c5"
+                        alt="Email"
+                      >
+                      <span
+                        style="
+                          color: white !important;
+                          font-size: 14px;
+                          text-decoration: none;
+                        "
+                        class="link"
+                      >
+                        info&#64;aayattours.com
+                      </span>
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td style="text-align: right; padding: 50px 50px 50px 0">
+            <table
+              align="right"
+              style="border-collapse:collapse;border:0px solid transparent;"
+            >
+              <tbody>
+                <tr>
+                  <td>
+                    <div style="
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: end;
+                      ">
+                      <img
+                        style="-ms-interpolation-mode:bicubic;margin-right: 10px; width: 20px;"
+                        src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/60e412f1-4d14-401d-9137-683f08fca9d0"
+                        alt="whatsapp"
+                      >
+                      214-555-5555
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;color: white; font-size: 14px; margin-top: 10px;'>
+                      (Mon-Fri - 5PM -9PM)
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;color: white; font-size: 14px;'>
+                      (Sat-Sun -10AM -5PM)
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h3 style='padding:0;font-family:"Arial", sans-serif;
+                        font-size: 20px;
+                        font-weight: 700;
+                        color: white;
+                        margin: 20px 0 12px;
+                      ;'>
+                      Get Social:
+                    </h3>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <table
+                      align="right"
+                      style="border-collapse:collapse;border:0px solid transparent;text-align: right;"
+                    >
+                      <tbody>
+                        <tr>
+                          <td>
+                            <a
+                              href="#"
+                              target="_blank"
+                              style="color:white;text-decoration:none;font-size:14px;"
+                            >
+                              <img
+                                src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/4a124740-506f-4996-91f0-db1820f8dbc8"
+                                alt="whatsapp"
+                                style="-ms-interpolation-mode:bicubic;"
+                              >
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href="#"
+                              target="_blank"
+                              style="color:white;text-decoration:none;font-size:14px;"
+                            >
+                              <img
+                                src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/db8940cb-029b-4be2-9eef-1eff6b6da219"
+                                alt="whatsapp"
+                                style="-ms-interpolation-mode:bicubic;"
+                              >
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href="#"
+                              target="_blank"
+                              style="color:white;text-decoration:none;font-size:14px;"
+                            >
+                              <img
+                                src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/941a8c38-bf91-48d4-8e50-209675fd4899"
+                                alt="whatsapp"
+                                style="-ms-interpolation-mode:bicubic;"
+                              >
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href="#"
+                              target="_blank"
+                              style="color:white;text-decoration:none;font-size:14px;"
+                            >
+                              <img
+                                src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/f8af3269-567f-4443-86d5-f569830234ba"
+                                alt="whatsapp"
+                                style="-ms-interpolation-mode:bicubic;"
+                              >
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table style="border:0px solid transparent;
+        width: 100%;
+        max-width: 600px;
+        border-collapse: collapse;
+        margin: 0 auto;
+      ;">
+      <tfoot style="background-color: #3e434f; padding: 50px">
+        <tr>
+          <td style="text-align: center; margin-bottom: -20px">
+            <div style="background-color: white; width: 100%; height: 1px"></div>
+          </td>
+        </tr>
+        <tr style="">
+          <td style="text-align: center; font-size: 20px">
+            <h2 style='margin:0;font-family:"Arial", sans-serif;
                 position: relative;
                 padding: 0 10px;
-                top: -18px;
+                top: -13px;
                 color: #ffffff;
                 display: inline-block;
                 font-size: 20px;
                 background-color: #3e434f;
-              ">
-            <span style="color: #ed9d58">Register</span> Early To Secure Your
-            Spot!
-          </h2>
-        </div>
-      </tr>
-      <tr style="display: block; width: 100%">
-        <td style="display: block; width: 100%">
-          <p style="
-                color: white;
-                text-align: center;
-                font-size: 10px;
-                margin-top: -10px;
-              ">
-            Copyright &copy; 2024. All right reserved.
-          </p>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-</body>
+              ;'>
+              <span style="color: #ed9d58">Register</span> Early To Secure Your
+              Spot!
+            </h2>
+          </td>
+        </tr>
+        <tr style="width: 100%">
+          <td style="display: block; width: 100%; padding-bottom: 20px">
+            <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;color: white; text-align: center; font-size: 10px;'>
+              Copyright &copy; 2024. All right reserved.
+            </p>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <!--=====|| Email Footer Section End ||=====-->
+  </body>
 
 </html>
