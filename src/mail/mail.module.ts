@@ -12,12 +12,12 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         port: 587,
         secure: false, // upgrade later with STARTTLS
         auth: {
-          user: 'jhamilton@quartolab.com',
-          pass: 'S3C5_You@99119!',
+          user: 'info@aayattours.com',
+          pass: 'Fatiha6@2024',
         },
       },
       defaults: {
-        from: 'jhamilton@quartolab.com',
+        from: 'info@aayattours.com',
       },
       template: {
         dir: join(__dirname, 'templates'),
