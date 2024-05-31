@@ -285,7 +285,7 @@ export class BookingService {
   async confirmBooking(id: number) {
     const response = await this.bookingRepository.findOne({
       relations: {
-        package: true,
+        package: { event: { instructors: true } },
       },
       where: {
         id: id,
@@ -310,10 +310,39 @@ export class BookingService {
         './confirmation',
         'Package Confirmation',
         {
-          name: response.firstName + ' ' + response.lastName,
-          packageName: pack.packageName,
-          roomName: pack.roomName,
-          verifyCode: verifyCode,
+          eventName: pack.event.eventName,
+          eventDateRange: Utils.formattedDateRange(
+            pack.event.startDate.toString(),
+            pack.event.endDate.toString(),
+          ),
+          slogan: pack.event.slogan,
+          bannerUrl: pack.event.bannerUrl,
+          instructors: pack.event.instructors,
+          receiver: {
+            name: response.firstName + ' ' + response.lastName,
+            email: response.email,
+          },
+          package: {
+            roomName: pack.roomName ?? '',
+            packageName: pack.packageName,
+            isSinglePackage:
+              pack.packageType == PACKAGE_TYPE.SINGLE ? true : false,
+            packagePerson: pack.packagePerson,
+            packagedays: Utils.dateDiffInDays(
+              pack.event.endDate,
+              pack.event.startDate,
+            ),
+            packagePrice: '$' + pack.packagePrice,
+            roomFeatures: pack.roomFeatures,
+            houseFeatures: pack.houseFeatures,
+            houseFeatureNote: pack.houseFeatureNote,
+            packageDealNote: pack.packageDealNote,
+            highlightFeatures: JSON.parse(pack.highlightFeatures),
+            packageDeal: JSON.parse(pack.packageDeal).map((x) => ({
+              ...x,
+              hasChildren: x.child.length > 0,
+            })),
+          },
         },
       );
 

@@ -17,7 +17,7 @@ export class AppService {
       id: 1,
       firstName: 'Rafiul Islam',
       lastName: 'shohan',
-      email: 'ris.shohan@gmail.com',
+      email: 'sohan@redlimesolutions.com',
       phone: '01854263181',
       password: '',
       isActive: true,
