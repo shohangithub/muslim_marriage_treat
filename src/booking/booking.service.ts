@@ -97,7 +97,7 @@ export class BookingService {
 
     if (paginationQuery.openText) {
       query.andWhere(
-        '(LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name) OR LOWER(booking.confirmationCode) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName, booking.lastName)) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName," ", booking.lastName)) LIKE LOWER(:name) OR LOWER(package.packageName) LIKE LOWER(:name) OR booking.transactionNumber)',
+        '(LOWER(booking.firstName) LIKE LOWER(:name) OR LOWER(booking.lastName) LIKE LOWER(:name) OR LOWER(booking.confirmationCode) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName, booking.lastName)) LIKE LOWER(:name) OR LOWER(CONCAT(booking.firstName," ", booking.lastName)) LIKE LOWER(:name) OR LOWER(package.packageName) LIKE LOWER(:name) OR LOWER(booking.transactionNumber) LIKE LOWER(:name) OR LOWER(CONCAT(booking.spouseFirstName, booking.spouseLastName)) LIKE LOWER(:name) OR LOWER(CONCAT(booking.spouseFirstName," ", booking.spouseLastName)) LIKE LOWER(:name) OR LOWER(booking.phone) LIKE LOWER(:name)  OR LOWER(booking.email) LIKE LOWER(:name) )',
         {
           name: `%${paginationQuery.openText}%`,
         },
@@ -119,8 +119,12 @@ export class BookingService {
         'booking.confirmationCode',
         'booking.firstName',
         'booking.lastName',
+        'booking.spouseFirstName',
+        'booking.spouseLastName',
         'booking.bookingStatus',
         'booking.bookingMoney',
+        'booking.phone',
+        'booking.email',
         'package.packageName',
         'event.id',
         'event.eventName',
