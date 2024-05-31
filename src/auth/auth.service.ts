@@ -19,7 +19,7 @@ export class AuthService {
     firstName: string;
     lastName: string;
   }> {
-
+    
     const user = await this.usersService.findByEmail(username);
     if (user == null) throw new UnauthorizedException('Invalid username');
 
