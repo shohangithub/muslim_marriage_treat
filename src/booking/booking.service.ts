@@ -198,7 +198,7 @@ export class BookingService {
     });
     if (isDuplicateCode)
       throw new HttpException(
-        `Invalid confirmation code.`,
+        `This confirmation number is already used.`,
         HttpStatus.BAD_REQUEST,
       );
 
