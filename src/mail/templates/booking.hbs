@@ -81,7 +81,7 @@
                         color: #ed9d58;
                         text-align: center;
                       ;'>
-                       {{eventName}}
+                      {{eventName}}
                     </h1>
                     {{#if instructors.length}}
                     <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
@@ -100,10 +100,10 @@
                       font-weight: 500;
                       font-style: italic;
                     ;'>
-                       {{this.name}}
+                      {{this.name}}
                     </p>
                     {{/each}}
-          {{/if}}
+                    {{/if}}
                     <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
                         color: white;
                         font-size: 20px;
@@ -114,7 +114,7 @@
                         margin-top: 5px;
                         display: inline-block;
                       ;'>
-                          {{slogan}}
+                      {{slogan}}
                     </p>
                   </td>
                 </tr>
@@ -139,7 +139,7 @@
                               alt="bed"
                             >
                           </td>
-                          <td>  {{eventDateRange}}</td>
+                          <td> {{eventDateRange}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -213,17 +213,17 @@
                   padding: 5px 10px;
                   border-radius: 5px;
                 "> {{#if package.isSinglePackage}}
-              NO HOTEL
-              {{/if}}
+                NO HOTEL
+                {{/if}}
 
-              {{#unless package.isSinglePackage}}
-              Weekend Package
-              {{/unless}}</span></span>
+                {{#unless package.isSinglePackage}}
+                Weekend Package
+                {{/unless}}</span></span>
             </p>
-             {{#unless package.isSinglePackage}}
+            {{#unless package.isSinglePackage}}
             <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;color: #ed9d58; margin-top: 20px;'>{{package.roomName}}</p>
             {{/unless}}
-            
+
             <h2 style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 30px; font-weight: 700;'>
               {{package.packageName}}
             </h2>
@@ -246,7 +246,7 @@
                         {{this.label}}
                       </p>
                     </td>
-                     {{/each}}
+                    {{/each}}
                   </tr>
                 </tbody>
               </table>
@@ -256,7 +256,7 @@
         <tr style="display: block; width: 100%; padding: 30px 0">
           <td style="display: block">
             <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700;'>
-                {{eventDateRange}}
+              {{eventDateRange}}
               <span style="font-size: 18px; font-weight: 400">({{package.packagedays}}-day package)</span>
             </p>
             <div style="margin-top: 20px">
@@ -278,13 +278,13 @@
                 font-size: 45px;
                 padding: 10px 0 20px;
               ;">
-               {{package.packagePrice}}
+              {{package.packagePrice}}
             </p>
             <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; margin-top: 10px;'>
               Room Features:
             </p>
             <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 18px; margin-top: 15px;'>
-             {{package.roomFeatures}}
+              {{package.roomFeatures}}
             </p>
             <table
               border="0"
@@ -303,11 +303,11 @@
                     <span style="font-size: 20px; font-weight: 700; margin-top: 10px">Package includes:</span>
                   </td>
                 </tr>
-            {{#each package.packageDeal}}
-{{#if this.hasChildren}}
-               
+                {{#each package.packageDeal}}
+                {{#if this.hasChildren}}
 
-                   <tr>
+
+                <tr>
                   <td
                     align="left"
                     style="font-size: 0px; padding: 0; word-break: break-word; padding-top: 10px;"
@@ -360,7 +360,7 @@
                             </span>
                           </td>
                         </tr>
-                         {{#each this.child}}
+                        {{#each this.child}}
                         <tr>
                           <td style="padding: 4px; vertical-align: middle; padding-top: 15px;">
                             <table
@@ -397,15 +397,15 @@
                             </span>
                           </td>
                         </tr>
-                         {{/each}}
+                        {{/each}}
                       </tbody>
                     </table>
                   </td>
                 </tr>
 
- {{else}}
+                {{else}}
                 <!--List Item End-->
-              <tr>
+                <tr>
                   <td
                     align="left"
                     style="font-size: 0px; padding: 0; word-break: break-word; padding-top: 10px;"
@@ -453,7 +453,7 @@
                                 font-style: italic;
                                 margin-left: 5px;
                               ">
-                            {{this.item}}
+                              {{this.item}}
                             </span>
                           </td>
                         </tr>
@@ -461,15 +461,18 @@
                     </table>
                   </td>
                 </tr>
-                 {{/if}}
-                 {{/each}}
+                {{/if}}
+                {{/each}}
                 <!--List Item End-->
                 <tr>
                   <td
                     align="left"
                     style="padding-top: 5px;"
                   >
-                    <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 16px; font-style: italic; color: red;' in>
+                    <p
+                      style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 16px; font-style: italic; color: red;'
+                      in
+                    >
                       *{{package.packageDealNote}}</p>
                     <p
                       style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 16px; font-style: italic; color: #ed9d58; text-align: center; margin-top: 30px;'>
@@ -480,7 +483,7 @@
                     <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 18px; margin-top: 15px;'>
                       {{package.houseFeatures}}
                     </p>
-                    
+
                     <div style="margin-top: 50px; text-align: center;">
                       <button style="
                                       border: 0;
@@ -560,7 +563,7 @@
                         src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/4844978b-346f-448c-ac78-014fc2afaadb"
                         alt="whatsapp"
                       >
-                      214-555-5555
+                      817-822-5628
                     </p>
                   </td>
                 </tr>
@@ -612,7 +615,7 @@
                         src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/60e412f1-4d14-401d-9137-683f08fca9d0"
                         alt="whatsapp"
                       >
-                      214-555-5555
+                      817-822-5628
                     </div>
                   </td>
                 </tr>

@@ -92,10 +92,10 @@
                       font-weight: 500;
                       font-style: italic;
                     ;'>
-                       {{this.name}}
+                      {{this.name}}
                     </p>
                     {{/each}}
-          {{/if}}
+                    {{/if}}
                     <p style='margin:0;padding:0;font-family:"Arial", sans-serif;
                       color: white;
                       font-size: 20px;
@@ -106,7 +106,7 @@
                       margin-top: 5px;
                       display: inline-block;
                     ;'>
-                       {{slogan}}
+                      {{slogan}}
                     </p>
                   </td>
                 </tr>
@@ -127,7 +127,7 @@
                             >
                           </td>
                           <td>
-                             {{eventDateRange}}
+                            {{eventDateRange}}
                           </td>
                         </tr>
                       </tbody>
@@ -230,25 +230,25 @@
                   padding: 5px 10px;
                   border-radius: 5px;
                 ">
-              {{#if package.isSinglePackage}}
-              NO HOTEL
-              {{/if}}
+                {{#if package.isSinglePackage}}
+                NO HOTEL
+                {{/if}}
 
-              {{#unless package.isSinglePackage}}
-              Weekend Package
-              {{/unless}}</span>
+                {{#unless package.isSinglePackage}}
+                Weekend Package
+                {{/unless}}</span>
             </p>
-             {{#unless package.isSinglePackage}}
+            {{#unless package.isSinglePackage}}
             <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;color: #ed9d58; margin-top: 20px;'>{{package.roomName}}</p>
-             {{/unless}}
+            {{/unless}}
             <h2 style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 30px; font-weight: 700;'>
-               {{package.packageName}}
+              {{package.packageName}}
             </h2>
             <center>
               <table style="border-collapse:collapse;border:0px solid transparent;margin-top: 20px;">
                 <tbody>
                   <tr>
-                     {{#each package.highlightFeatures}}
+                    {{#each package.highlightFeatures}}
                     <td style="padding-right: 20px;">
                       <p
                         style='margin:0;padding:0;font-family:"Arial", sans-serif;font-weight:400;font-size: 20px;  display: flex; align-items: center;'>
@@ -256,7 +256,7 @@
                           style="-ms-interpolation-mode:bicubic;margin-right: 10px;"
                           src="https://muslimcouplesretreat.com/assets/images/email-template/{{this.icon}}.png"
                           alt="bed"
-                        >  {{this.label}}
+                        > {{this.label}}
                       </p>
                     </td>
                     {{/each}}
@@ -319,7 +319,7 @@
                         src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/4844978b-346f-448c-ac78-014fc2afaadb"
                         alt="whatsapp"
                       >
-                      214-555-5555
+                      817-822-5628
                     </p>
                   </td>
                 </tr>
@@ -357,7 +357,7 @@
                         style="-ms-interpolation-mode:bicubic;margin-right: 10px; width: 20px;"
                         src="https://devredlimestorage.blob.core.windows.net/muslimcoupleretreat/60e412f1-4d14-401d-9137-683f08fca9d0"
                         alt="whatsapp"
-                      > 214-555-5555
+                      > 817-822-5628
                     </div>
                   </td>
                 </tr>
@@ -499,4 +499,5 @@
       </tfoot>
     </table>
   </body>
+
 </html>
