@@ -14,19 +14,24 @@ import { MailModule } from './mail/mail.module';
 import { VenueModule } from './venue/venue.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { EventScheduleModule } from './event-schedule/event-schedule.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     AzureBlobModule,
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: '107.180.113.203',
-      port: 3306,
-      username: 'sa',
-      password: 'EMytm6Et;9ZL',
-      database: 'muslim_couple_retreat',
-      entities: [__dirname + '/../**/*.entity.js'],
-      synchronize: false,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],      
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: parseInt(configService.get<string>('DATABASE_PORT')),
+        username: configService.get<string>('DATABASE_USER'),
+        password: configService.get<string>('DATABASE_PASS'),
+        database: configService.get<string>('DATABASE_NAME'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: false,
+      }),
+      inject: [ConfigService],
     }),
     ScheduleModule.forRoot(),
     UserModule,
