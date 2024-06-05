@@ -107,7 +107,7 @@ export class BookingService {
     const totalCount = await query.getCount();
     const data = await query
       .orderBy(
-        'booking.id',
+        'booking.bookedTime',
         paginationQuery.isAscending == 'true' ? 'ASC' : 'DESC',
       )
       .skip(paginationQuery.pageIndex * paginationQuery.pageSize)
@@ -128,6 +128,7 @@ export class BookingService {
         'package.packageName',
         'event.id',
         'event.eventName',
+        'bookedTime'
       ])
       .getMany();
 
