@@ -123,12 +123,12 @@ export class BookingService {
         'booking.spouseLastName',
         'booking.bookingStatus',
         'booking.bookingMoney',
+        'booking.bookedTime',
         'booking.phone',
         'booking.email',
         'package.packageName',
         'event.id',
-        'event.eventName',
-        'bookedTime'
+        'event.eventName',        
       ])
       .getMany();
 
