@@ -55,10 +55,10 @@ export class BookingService {
           });
           if (samePackage) {
             const stock: ManagePackageStockDto = {
-              totalQty: res.totalQty - 1,
-              reservedQty: res.reservedQty + 1,
+              totalQty: samePackage.totalQty - 1,
+              reservedQty: samePackage.reservedQty + 1,
             };
-            await this.packageRepository.update(res.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         } else if (res.packageType == PACKAGE_TYPE.THREEDAYS) {
           const samePackage = await this.packageRepository.findOne({
@@ -69,10 +69,10 @@ export class BookingService {
           });
           if (samePackage) {
             const stock: ManagePackageStockDto = {
-              totalQty: res.totalQty - 1,
-              reservedQty: res.reservedQty + 1,
+              totalQty: samePackage.totalQty - 1,
+              reservedQty: samePackage.reservedQty + 1,
             };
-            await this.packageRepository.update(res.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         }
 
@@ -232,11 +232,11 @@ export class BookingService {
 
           if (samePackage) {
             const stock: ManagePackageStockDto = {
-              totalQty: pack.totalQty + totalBooked,
-              reservedQty: pack.reservedQty - totalBooked,
+              totalQty: samePackage.totalQty + totalBooked,
+              reservedQty: samePackage.reservedQty - totalBooked,
             };
             if (stock.reservedQty < 0) stock.reservedQty = 0;
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
           const samePackage = await this.packageRepository.findOne({
@@ -248,11 +248,11 @@ export class BookingService {
 
           if (samePackage) {
             const stock: ManagePackageStockDto = {
-              totalQty: pack.totalQty + totalBooked,
-              reservedQty: pack.reservedQty - totalBooked,
+              totalQty: samePackage.totalQty + totalBooked,
+              reservedQty: samePackage.reservedQty - totalBooked,
             };
             if (stock.reservedQty < 0) stock.reservedQty = 0;
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         }
 
@@ -316,11 +316,11 @@ export class BookingService {
 
           if (samePackage) {
             const stock: CompletePackageStockDto = {
-              bookedQty: pack.bookedQty + 1,
-              reservedQty: pack.reservedQty - 1,
+              bookedQty: samePackage.bookedQty + 1,
+              reservedQty: samePackage.reservedQty - 1,
             };
             if (stock.reservedQty < 0) stock.reservedQty = 0;
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
           const samePackage = await this.packageRepository.findOne({
@@ -332,11 +332,11 @@ export class BookingService {
 
           if (samePackage) {
             const stock: CompletePackageStockDto = {
-              bookedQty: pack.bookedQty + 1,
-              reservedQty: pack.reservedQty - 1,
+              bookedQty: samePackage.bookedQty + 1,
+              reservedQty: samePackage.reservedQty - 1,
             };
             if (stock.reservedQty < 0) stock.reservedQty = 0;
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         }
 
@@ -445,10 +445,10 @@ export class BookingService {
 
           if (samePackage) {
             const stock: ConfirmPackageStockDto = {
-              bookedQty: pack.bookedQty - 1,
-              confirmedQty: pack.confirmedQty + 1,
+              bookedQty: samePackage.bookedQty - 1,
+              confirmedQty: samePackage.confirmedQty + 1,
             };
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
           const samePackage = await this.packageRepository.findOne({
@@ -460,10 +460,10 @@ export class BookingService {
 
           if (samePackage) {
             const stock: ConfirmPackageStockDto = {
-              bookedQty: pack.bookedQty - 1,
-              confirmedQty: pack.confirmedQty + 1,
+              bookedQty: samePackage.bookedQty - 1,
+              confirmedQty: samePackage.confirmedQty + 1,
             };
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         }
 
@@ -565,10 +565,10 @@ export class BookingService {
 
           if (samePackage) {
             const stock: CancelPackageStockDto = {
-              totalQty: pack.totalQty + 1,
-              bookedQty: pack.bookedQty - 1,
+              totalQty: samePackage.totalQty + 1,
+              bookedQty: samePackage.bookedQty - 1,
             };
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
           const samePackage = await this.packageRepository.findOne({
@@ -580,10 +580,10 @@ export class BookingService {
 
           if (samePackage) {
             const stock: CancelPackageStockDto = {
-              totalQty: pack.totalQty + 1,
-              bookedQty: pack.bookedQty - 1,
+              totalQty: samePackage.totalQty + 1,
+              bookedQty: samePackage.bookedQty - 1,
             };
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         }
 
@@ -630,10 +630,10 @@ export class BookingService {
 
           if (samePackage) {
             const stock: RefundPackageStockDto = {
-              totalQty: pack.totalQty + 1,
-              confirmedQty: pack.confirmedQty - 1,
+              totalQty: samePackage.totalQty + 1,
+              confirmedQty: samePackage.confirmedQty - 1,
             };
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
           const samePackage = await this.packageRepository.findOne({
@@ -645,10 +645,10 @@ export class BookingService {
 
           if (samePackage) {
             const stock: RefundPackageStockDto = {
-              totalQty: pack.totalQty + 1,
-              confirmedQty: pack.confirmedQty - 1,
+              totalQty: samePackage.totalQty + 1,
+              confirmedQty: samePackage.confirmedQty - 1,
             };
-            await this.packageRepository.update(pack.id, stock);
+            await this.packageRepository.update(samePackage.id, stock);
           }
         }
 
