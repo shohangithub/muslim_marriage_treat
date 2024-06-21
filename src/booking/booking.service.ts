@@ -431,6 +431,7 @@ export class BookingService {
           bookedQty: pack.bookedQty - 1,
           confirmedQty: pack.confirmedQty + 1,
         };
+        
 
         //#region UPDATE SAME QUANTITY
 
