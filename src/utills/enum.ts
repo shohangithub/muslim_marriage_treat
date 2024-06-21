@@ -9,6 +9,7 @@ export enum PACKAGE_TYPE {
   VILLA_ONE = 'VILLA_ONE',
   VILLA_TWO = 'VILLA_TWO',
   SINGLE = 'SINGLE',
+  THREEDAYS = 'THREEDAYS',
 }
 
 

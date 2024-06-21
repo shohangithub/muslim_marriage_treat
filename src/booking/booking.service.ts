@@ -41,7 +41,43 @@ export class BookingService {
         createBookingDto.expireTime = Utils.getExpireTime(
           this.bookingExpireTime,
         );
+
         const result = await this.bookingRepository.save(createBookingDto);
+
+        //#region UPDATE SAME QUANTITY
+
+        if (res.packageType == PACKAGE_TYPE.SINGLE) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.THREEDAYS,
+              event: { id: res.event.id },
+            },
+          });
+          if (samePackage) {
+            const stock: ManagePackageStockDto = {
+              totalQty: res.totalQty - 1,
+              reservedQty: res.reservedQty + 1,
+            };
+            await this.packageRepository.update(res.id, stock);
+          }
+        } else if (res.packageType == PACKAGE_TYPE.THREEDAYS) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.SINGLE,
+              event: { id: res.event.id },
+            },
+          });
+          if (samePackage) {
+            const stock: ManagePackageStockDto = {
+              totalQty: res.totalQty - 1,
+              reservedQty: res.reservedQty + 1,
+            };
+            await this.packageRepository.update(res.id, stock);
+          }
+        }
+
+        //#endregion
+
         const stock: ManagePackageStockDto = {
           totalQty: res.totalQty - 1,
           reservedQty: res.reservedQty + 1,
@@ -128,7 +164,7 @@ export class BookingService {
         'booking.email',
         'package.packageName',
         'event.id',
-        'event.eventName',        
+        'event.eventName',
       ])
       .getMany();
 
@@ -183,6 +219,47 @@ export class BookingService {
             totalQty: pack.totalQty + totalBooked,
             reservedQty: pack.reservedQty - totalBooked,
           };
+
+          //#region UPDATE SAME QUANTITY
+
+        if (pack.packageType == PACKAGE_TYPE.SINGLE) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.THREEDAYS,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: ManagePackageStockDto = {
+              totalQty: pack.totalQty + totalBooked,
+              reservedQty: pack.reservedQty - totalBooked,
+            };
+            if (stock.reservedQty < 0) stock.reservedQty = 0;
+            await this.packageRepository.update(pack.id, stock);
+          }
+        } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.SINGLE,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: ManagePackageStockDto = {
+              totalQty: pack.totalQty + totalBooked,
+              reservedQty: pack.reservedQty - totalBooked,
+            };
+            if (stock.reservedQty < 0) stock.reservedQty = 0;
+            await this.packageRepository.update(pack.id, stock);
+          }
+        }
+
+        //#endregion
+
+        
+
           if (stock.reservedQty < 0) stock.reservedQty = 0;
 
           await this.packageRepository.update(pack.id, stock);
@@ -227,6 +304,44 @@ export class BookingService {
           reservedQty: pack.reservedQty - 1,
         };
 
+        //#region UPDATE SAME QUANTITY
+
+        if (pack.packageType == PACKAGE_TYPE.SINGLE) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.THREEDAYS,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: CompletePackageStockDto = {
+              bookedQty: pack.bookedQty + 1,
+              reservedQty: pack.reservedQty - 1,
+            };
+            if (stock.reservedQty < 0) stock.reservedQty = 0;
+            await this.packageRepository.update(pack.id, stock);
+          }
+        } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.SINGLE,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: CompletePackageStockDto = {
+              bookedQty: pack.bookedQty + 1,
+              reservedQty: pack.reservedQty - 1,
+            };
+            if (stock.reservedQty < 0) stock.reservedQty = 0;
+            await this.packageRepository.update(pack.id, stock);
+          }
+        }
+
+        //#endregion
+
         if (stock.reservedQty < 0) stock.reservedQty = 0;
 
         await this.packageRepository.update(pack.id, stock);
@@ -260,8 +375,10 @@ export class BookingService {
             pack.event.endDate,
           ),
           packagePrice: '$' + pack.packagePrice,
-          roomFeatures: pack.roomFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/img, "")|| "",
-          houseFeatures: pack?.houseFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/img, "")|| "",
+          roomFeatures:
+            pack.roomFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/gim, '') || '',
+          houseFeatures:
+            pack?.houseFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/gim, '') || '',
           houseFeatureNote: pack.houseFeatureNote,
           packageDealNote: pack.packageDealNote,
           highlightFeatures: JSON.parse(pack.highlightFeatures),
@@ -314,6 +431,43 @@ export class BookingService {
           bookedQty: pack.bookedQty - 1,
           confirmedQty: pack.confirmedQty + 1,
         };
+
+        //#region UPDATE SAME QUANTITY
+
+        if (pack.packageType == PACKAGE_TYPE.SINGLE) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.THREEDAYS,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: ConfirmPackageStockDto = {
+              bookedQty: pack.bookedQty - 1,
+              confirmedQty: pack.confirmedQty + 1,
+            };
+            await this.packageRepository.update(pack.id, stock);
+          }
+        } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.SINGLE,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: ConfirmPackageStockDto = {
+              bookedQty: pack.bookedQty - 1,
+              confirmedQty: pack.confirmedQty + 1,
+            };
+            await this.packageRepository.update(pack.id, stock);
+          }
+        }
+
+        //#endregion
+
         await this.packageRepository.update(pack.id, stock);
       }
       // generate code
@@ -397,6 +551,43 @@ export class BookingService {
           totalQty: pack.totalQty + 1,
           bookedQty: pack.bookedQty - 1,
         };
+
+        //#region UPDATE SAME QUANTITY
+
+        if (pack.packageType == PACKAGE_TYPE.SINGLE) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.THREEDAYS,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: CancelPackageStockDto = {
+              totalQty: pack.totalQty + 1,
+              bookedQty: pack.bookedQty - 1,
+            };
+            await this.packageRepository.update(pack.id, stock);
+          }
+        } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.SINGLE,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: CancelPackageStockDto = {
+              totalQty: pack.totalQty + 1,
+              bookedQty: pack.bookedQty - 1,
+            };
+            await this.packageRepository.update(pack.id, stock);
+          }
+        }
+
+        //#endregion
+
         await this.packageRepository.update(pack.id, stock);
       }
 
@@ -425,6 +616,43 @@ export class BookingService {
           totalQty: pack.totalQty + 1,
           confirmedQty: pack.confirmedQty - 1,
         };
+
+        //#region UPDATE SAME QUANTITY
+
+        if (pack.packageType == PACKAGE_TYPE.SINGLE) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.THREEDAYS,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: RefundPackageStockDto = {
+              totalQty: pack.totalQty + 1,
+              confirmedQty: pack.confirmedQty - 1,
+            };
+            await this.packageRepository.update(pack.id, stock);
+          }
+        } else if (pack.packageType == PACKAGE_TYPE.THREEDAYS) {
+          const samePackage = await this.packageRepository.findOne({
+            where: {
+              packageType: PACKAGE_TYPE.SINGLE,
+              event: { id: pack.event.id },
+            },
+          });
+
+          if (samePackage) {
+            const stock: RefundPackageStockDto = {
+              totalQty: pack.totalQty + 1,
+              confirmedQty: pack.confirmedQty - 1,
+            };
+            await this.packageRepository.update(pack.id, stock);
+          }
+        }
+
+        //#endregion
+
         await this.packageRepository.update(pack.id, stock);
       }
 
