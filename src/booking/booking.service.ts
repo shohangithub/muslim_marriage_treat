@@ -534,7 +534,7 @@ export class BookingService {
   async cancelBooking(id: number) {
     const response = await this.bookingRepository.findOne({
       relations: {
-        package: true,
+        package: { event: true },
       },
       where: {
         id: id,
