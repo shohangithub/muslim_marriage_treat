@@ -354,6 +354,7 @@ export class BookingService {
       const templateData = {
         logoUrl: 'https://muslimcouplesretreat.com/assets/images/logo.png',
         eventName: pack.event.eventName,
+        eventId: pack.event.id,
         // eventDateRange: `${dateFormat(pack.event.startDate, "longDate")} - ${dateFormat(pack.event.endDate, "longDate")}`,
         eventDateRange: Utils.formattedDateRange(
           pack.event.startDate.toString(),
