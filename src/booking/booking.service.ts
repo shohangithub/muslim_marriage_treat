@@ -20,6 +20,7 @@ import { BookingQueryDto } from './dto/booking-query.dto';
 @Injectable()
 export class BookingService {
   readonly bookingExpireTime = process.env.BOOKING_EXPIRE_TIME;
+  readonly admin_email_address = process.env.ADMIN_EMAIL;
   constructor(
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
@@ -344,6 +345,11 @@ export class BookingService {
 
         await this.packageRepository.update(pack.id, stock);
       }
+      const weekdays = Utils.getWeekDays(
+        pack.event.startDate,
+        pack.event.endDate,
+      );
+      const dates = Utils.getDays(pack.event.startDate,pack.event.endDate);
 
       const templateData = {
         logoUrl: 'https://muslimcouplesretreat.com/assets/images/logo.png',
@@ -365,13 +371,14 @@ export class BookingService {
         package: {
           roomName: pack.roomName ?? '',
           packageName: pack.packageName,
-          isSinglePackage:
-            pack.packageType == PACKAGE_TYPE.SINGLE || PACKAGE_TYPE.THREEDAYS ? true : false,
+          isSinglePackage: pack.packageType == PACKAGE_TYPE.SINGLE || pack.packageType == PACKAGE_TYPE.THREEDAYS ? true: false,
           packagePerson: pack.packagePerson,
           packagedays: Utils.dateDiffInDays(
             pack.event.startDate,
             pack.event.endDate,
           ),
+          singleDate: dates[1]??"",
+          singleWeekday: weekdays[1]??"",
           packagePrice: '$' + pack.packagePrice,
           roomFeatures:
             pack.roomFeatures?.replace(/(<p[^>]+?>|<p>|<\/p>)/gim, '') || '',
@@ -386,16 +393,21 @@ export class BookingService {
           })),
         },
       };
-
+      const templateURL =
+        pack.packageType == PACKAGE_TYPE.SINGLE
+          ? './booking_single_package'
+          : pack.packageType == PACKAGE_TYPE.THREEDAYS
+            ? './booking_threedays_package'
+            : './booking';
       this.mailService.sendEmailwithTemplate(
         response.email,
-        './booking',
+        templateURL,
         'Package Booking Information',
         templateData,
       );
 
       this.mailService.sendEmailwithTemplate(
-        'info@aayattours.com',
+        this.admin_email_address,
         './admin-booking',
         'Package Booking Information',
         templateData,
@@ -471,9 +483,22 @@ export class BookingService {
       // generate code
       const verifyCode = await this.generateVerifyCode();
 
+      const weekdays = Utils.getWeekDays(
+        pack.event.startDate,
+        pack.event.endDate,
+      );
+      const dates = Utils.getDays(pack.event.startDate,pack.event.endDate);
+
+
+      const templateURL =
+        pack.packageType == PACKAGE_TYPE.SINGLE
+          ? './confirmation_single_package'
+          : pack.packageType == PACKAGE_TYPE.THREEDAYS
+            ? './confirmation_threedays_package'
+            : './confirmation';
       this.mailService.sendEmailwithTemplate(
         response.email,
-        './confirmation',
+        templateURL,
         'Package Confirmation',
         {
           eventName: pack.event.eventName,
@@ -492,12 +517,16 @@ export class BookingService {
             roomName: pack.roomName ?? '',
             packageName: pack.packageName,
             isSinglePackage:
-              pack.packageType == PACKAGE_TYPE.SINGLE || PACKAGE_TYPE.THREEDAYS ? true : false,
+              pack.packageType == PACKAGE_TYPE.SINGLE || pack.packageType == PACKAGE_TYPE.THREEDAYS
+                ? true
+                : false,
             packagePerson: pack.packagePerson,
             packagedays: Utils.dateDiffInDays(
               pack.event.startDate,
               pack.event.endDate,
             ),
+            singleDate: dates[1]??"",
+            singleWeekday: weekdays[1]??"",
             packagePrice: '$' + pack.packagePrice,
             roomFeatures: pack.roomFeatures,
             houseFeatures: pack.houseFeatures,

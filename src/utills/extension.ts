@@ -70,8 +70,38 @@ export class Utils {
     return Math.floor((utc2 - utc1) / _MS_PER_DAY) + 1;
   }
 
+  static getWeekDays(a, b) {
+    const start = new Date(a);
+    const end = new Date(b);
+
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const weekDays:string[]=[];
+    let loop = new Date(start);
+    while (loop <= end) {
+      weekDays.push(days[loop.getDay()]);
+      const newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+    }
+    return weekDays;
+  }
+
+  static getDays(a, b) {
+    const start = new Date(a);
+    const end = new Date(b);
+
+    const weekDays:string[]=[];
+    let loop = new Date(start);
+    while (loop <= end) {
+      
+      weekDays.push(this.formattedDate(loop.toISOString().split('T')[0]));
+      const newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+    }
+    return weekDays;
+  }
+
   static getExpireTime(expireTime) {
-   return new Date(
+    return new Date(
       new Date().setMinutes(new Date().getMinutes() + parseInt(expireTime)),
     )
       .getTime()
