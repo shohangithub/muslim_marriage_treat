@@ -373,6 +373,7 @@ export class BookingService {
           roomName: pack.roomName ?? '',
           packageName: pack.packageName,
           isSinglePackage: pack.packageType == PACKAGE_TYPE.SINGLE || pack.packageType == PACKAGE_TYPE.THREEDAYS ? true: false,
+          ondayPackage:  pack.packageType == PACKAGE_TYPE.SINGLE ? true : false,
           packagePerson: pack.packagePerson,
           packagedays: Utils.dateDiffInDays(
             pack.event.startDate,
