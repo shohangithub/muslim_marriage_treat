@@ -144,17 +144,19 @@
                 </tbody>
               </table>
             </center>
-               {{#if package.isSinglePackage}}
+               {{#if package.ondayPackage}}
                 <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; margin-top: 20px;'>
                  {{package.singleDate}} {{package.singleWeekday}}
                  <span style="font-size: 18px; font-weight: 400">(1-day package)</span>
                </p>
-               {{else}}
-               <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; margin-top: 20px;'>
+                {{/if}}
+
+                {{#unless package.ondayPackage}}
+                <p style='margin:0;padding:0;font-family:"Arial", sans-serif;font-size: 20px; font-weight: 700; margin-top: 20px;'>
               {{eventDateRange}}
               <span style="font-size: 18px; font-weight: 400">({{package.packagedays}}-day package)</span>
             </p>
-                {{/if}}
+      {{/unless}}
 
           </td>
         </tr>
