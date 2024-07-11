@@ -66,6 +66,7 @@ export class BookingController {
   confirmBooking(@Param('id') id: number) {
     return this.bookingService.confirmBooking(id);
   }
+  
 
   @UseGuards(AuthGuard)
   @Put('refund-booking/:id')
